@@ -13,10 +13,10 @@ export default function SiteFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative z-10 border-t border-cyan-300/10 bg-slate-950/80 px-5 py-8 text-sm text-slate-300 sm:px-8">
+    <footer className="footer-shell relative z-10 px-5 py-8 text-sm sm:px-8">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div className="min-w-0">
-          <p className="font-semibold text-slate-100">
+          <p className="font-semibold text-white">
             &copy; {currentYear} Chaniru Weerasuriya.
           </p>
           <p className="mt-2 leading-6">
@@ -29,7 +29,7 @@ export default function SiteFooter() {
             <li>
               <a
                 href="#home"
-                className="rounded-md text-cyan-100 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
+                className="text-link focus-ring rounded-md underline underline-offset-4 transition hover:text-white"
               >
                 Back to top
               </a>
@@ -41,7 +41,7 @@ export default function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`${link.label} profile opens in a new tab`}
-                  className="rounded-md text-cyan-100 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
+                  className="text-link focus-ring rounded-md underline underline-offset-4 transition hover:text-white"
                 >
                   {link.label}
                 </a>

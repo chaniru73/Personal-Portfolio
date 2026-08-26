@@ -1,3 +1,5 @@
+import RevealOnScroll from "@/components/reveal-on-scroll";
+
 const education = [
   "BSc (Hons) in Software Engineering",
   "Third-year undergraduate",
@@ -34,15 +36,15 @@ function DetailList({
 }) {
   return (
     <div>
-      <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-cyan-100">
+      <h3 className="accent-text text-sm font-bold uppercase tracking-[0.16em]">
         {title}
       </h3>
-      <ul className="mt-4 grid gap-3 text-sm leading-6 text-slate-300">
+      <ul className="body-copy mt-4 grid gap-3 text-sm leading-6">
         {items.map((item) => (
           <li key={item} className="flex gap-3">
             <span
               aria-hidden="true"
-              className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300 shadow-[0_0_14px_rgba(34,211,238,0.55)]"
+              className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent)]"
             />
             <span>{item}</span>
           </li>
@@ -54,34 +56,31 @@ function DetailList({
 
 export default function AboutSection() {
   return (
-    <section
-      id="about"
-      aria-labelledby="about-title"
-      className="relative border-t border-cyan-300/10 px-5 py-20 sm:px-8 lg:py-28"
-    >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/40 to-transparent"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-16 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-500/10 blur-3xl"
-      />
+    <RevealOnScroll delay={80} variant="fade-right">
+      <section
+        id="about"
+        aria-labelledby="about-title"
+        className="section-shell page-panel relative px-5 py-20 sm:px-8 lg:py-28"
+      >
+        <div
+          aria-hidden="true"
+          className="section-divider pointer-events-none absolute inset-x-0 top-0 h-px"
+        />
 
       <div className="relative mx-auto grid w-full max-w-6xl gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-        <div>
-          <p className="mb-5 inline-flex rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-sm font-medium text-cyan-100 shadow-[0_0_24px_rgba(34,211,238,0.08)]">
+        <div className="stagger-item stagger-delay-1">
+          <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             About Me
           </p>
 
           <h2
             id="about-title"
-            className="max-w-3xl text-3xl font-bold tracking-normal text-white sm:text-4xl lg:text-5xl"
+            className="section-title max-w-3xl text-3xl font-bold tracking-normal sm:text-4xl lg:text-5xl"
           >
             Building software with a focus on reliable delivery.
           </h2>
 
-          <div className="mt-7 space-y-5 text-base leading-8 text-slate-300 sm:text-lg">
+          <div className="body-copy mt-7 space-y-5 text-base leading-8 sm:text-lg">
             <p>
               I&apos;m a third-year BSc (Hons) Software Engineering undergraduate
               at NSBM Green University. I chose this field because I enjoy
@@ -106,22 +105,23 @@ export default function AboutSection() {
 
         <aside
           aria-label="About information"
-          className="rounded-2xl border border-cyan-300/15 bg-slate-950/70 p-5 shadow-2xl shadow-cyan-950/30 backdrop-blur sm:p-6"
+          className="stagger-item stagger-delay-2 surface-card rounded-lg p-5 sm:p-6"
         >
-          <div className="grid gap-8 rounded-xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+          <div className="grid gap-8 rounded-lg border border-[var(--color-border-soft)] bg-[var(--color-accent-soft)] p-4 sm:p-5">
             <DetailList title="Education" items={education} />
             <DetailList title="Currently learning" items={currentlyLearning} />
             <DetailList title="Core strengths" items={coreStrengths} />
           </div>
         </aside>
 
-        <div className="lg:col-span-2">
-          <p className="rounded-xl border border-blue-300/20 bg-blue-300/[0.07] px-5 py-4 text-sm font-semibold leading-7 text-blue-100 shadow-[0_0_28px_rgba(59,130,246,0.12)] sm:text-base">
+        <div className="stagger-item stagger-delay-3 lg:col-span-2">
+          <p className="soft-card rounded-lg px-5 py-4 text-sm font-semibold leading-7 text-[var(--color-heading)] sm:text-base">
             I&apos;m open to Software Engineering, Backend Development, Cloud,
             and DevOps internships or entry-level opportunities.
           </p>
         </div>
-      </div>
-    </section>
+        </div>
+      </section>
+    </RevealOnScroll>
   );
 }

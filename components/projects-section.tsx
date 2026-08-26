@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import RevealOnScroll from "@/components/reveal-on-scroll";
+
 const project = {
   number: "Project 01",
   name: "University ERP System",
@@ -42,7 +44,7 @@ const project = {
 
 function TechnologyTag({ technology }: { technology: string }) {
   return (
-    <span className="max-w-full rounded-md border border-cyan-300/20 bg-cyan-300/[0.08] px-3 py-1.5 text-sm font-semibold leading-5 text-cyan-50">
+    <span className="skill-badge text-sm font-semibold">
       {technology}
     </span>
   );
@@ -59,11 +61,11 @@ function ProjectDetail({
     <section aria-labelledby={`${title.toLowerCase().replaceAll(" ", "-")}-title`}>
       <h4
         id={`${title.toLowerCase().replaceAll(" ", "-")}-title`}
-        className="text-sm font-bold uppercase tracking-[0.16em] text-cyan-100"
+        className="accent-text text-sm font-bold uppercase tracking-[0.16em]"
       >
         {title}
       </h4>
-      <div className="mt-3 text-sm leading-7 text-slate-300 sm:text-base">
+      <div className="body-copy mt-3 text-sm leading-7 sm:text-base">
         {children}
       </div>
     </section>
@@ -72,80 +74,77 @@ function ProjectDetail({
 
 export default function ProjectsSection() {
   return (
-    <section
-      id="projects"
-      aria-labelledby="projects-title"
-      className="relative border-t border-cyan-300/10 px-5 py-20 sm:px-8 lg:py-28"
-    >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/40 to-transparent"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-24 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl"
-      />
+    <RevealOnScroll delay={160} variant="fade-left">
+      <section
+        id="projects"
+        aria-labelledby="projects-title"
+        className="section-shell page-panel relative px-5 py-20 sm:px-8 lg:py-28"
+      >
+        <div
+          aria-hidden="true"
+          className="section-divider pointer-events-none absolute inset-x-0 top-0 h-px"
+        />
 
       <div className="relative mx-auto w-full max-w-6xl">
-        <div className="max-w-3xl">
-          <p className="mb-5 inline-flex rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-sm font-medium text-cyan-100 shadow-[0_0_24px_rgba(34,211,238,0.08)]">
+        <div className="stagger-item stagger-delay-1 max-w-3xl">
+          <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             Projects
           </p>
 
           <h2
             id="projects-title"
-            className="text-3xl font-bold tracking-normal text-white sm:text-4xl lg:text-5xl"
+            className="section-title text-3xl font-bold tracking-normal sm:text-4xl lg:text-5xl"
           >
             Practical work that reflects how I learn and build.
           </h2>
 
-          <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
+          <p className="body-copy mt-6 max-w-2xl text-base leading-8 sm:text-lg">
             A selection of university and personal projects where I have applied
             software development concepts to practical problems.
           </p>
         </div>
 
-        <article className="group mt-12 grid min-w-0 gap-6 rounded-lg border border-cyan-300/15 bg-slate-950/75 p-5 shadow-2xl shadow-cyan-950/25 backdrop-blur transition duration-200 hover:-translate-y-1 hover:border-cyan-200/35 hover:bg-slate-900/80 sm:p-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <article className="stagger-item stagger-delay-2 surface-card card-hover group mt-12 grid min-w-0 gap-6 rounded-lg p-5 sm:p-6 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="min-w-0">
             <div className="flex min-w-0 flex-wrap items-center gap-2.5">
-              <span className="rounded-md border border-blue-300/25 bg-blue-300/[0.08] px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-blue-100">
+              <span className="meta-badge text-xs font-bold uppercase tracking-[0.16em]">
                 {project.number}
               </span>
-              <span className="rounded-md border border-cyan-300/25 bg-cyan-300/[0.1] px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-cyan-100">
+              <span className="meta-badge text-xs font-bold uppercase tracking-[0.16em]">
                 {project.type}
               </span>
-              <span className="rounded-md border border-emerald-300/25 bg-emerald-300/[0.1] px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-emerald-100">
+              <span className="status-badge rounded-md px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em]">
                 {project.status}
               </span>
             </div>
 
-            <h3 className="mt-6 text-2xl font-bold tracking-normal text-white sm:text-3xl">
+            <h3 className="card-title mt-6 text-2xl font-bold tracking-normal sm:text-3xl">
               {project.name}
             </h3>
 
-            <p className="mt-4 text-base leading-8 text-slate-300">
+            <p className="body-copy mt-4 text-base leading-8">
               {project.description}
             </p>
 
             <div
               aria-label="Project visual placeholder"
-              className="mt-6 overflow-hidden rounded-lg border border-blue-300/20 bg-gradient-to-br from-slate-950 via-blue-950/55 to-cyan-950/35 p-4 shadow-[0_0_32px_rgba(59,130,246,0.12)]"
+              className="project-visual mt-6 overflow-hidden rounded-lg p-4"
             >
-              <div className="rounded-md border border-white/10 bg-white/[0.04] p-4">
+              <div className="rounded-md border border-[var(--color-border-soft)] bg-white p-4">
                 <div className="mb-5 flex items-center gap-2">
-                  <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-yellow-300" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-border)]" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-accent-light)]" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-accent)]" />
                 </div>
-                <p className="text-lg font-bold text-white">
+                <p className="card-title text-lg font-bold">
                   University ERP System
                 </p>
-                <div className="mt-5 grid grid-cols-1 gap-2 text-sm font-semibold text-cyan-50 sm:grid-cols-2">
+                <div className="tag-list mt-6 text-sm font-semibold text-[var(--color-accent-strong)]">
                   {["Backend", "APIs", "Database", "Access Control"].map(
                     (item) => (
                       <span
                         key={item}
-                        className="rounded-md border border-cyan-300/20 bg-cyan-300/[0.08] px-3 py-2"
+                        className="skill-badge text-sm font-semibold"
                       >
                         {item}
                       </span>
@@ -171,7 +170,7 @@ export default function ProjectsSection() {
                   <li key={feature} className="flex min-w-0 gap-3">
                     <span
                       aria-hidden="true"
-                      className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300 shadow-[0_0_14px_rgba(34,211,238,0.55)]"
+                      className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent)]"
                     />
                     <span>{feature}</span>
                   </li>
@@ -180,7 +179,7 @@ export default function ProjectsSection() {
             </ProjectDetail>
 
             <ProjectDetail title="Technologies">
-              <ul className="flex min-w-0 flex-wrap gap-2">
+              <ul className="tag-list mt-5">
                 {project.technologies.map((technology) => (
                   <li key={technology} className="min-w-0 max-w-full">
                     <TechnologyTag technology={technology} />
@@ -190,16 +189,16 @@ export default function ProjectsSection() {
             </ProjectDetail>
 
             <ProjectDetail title="Links">
-              <dl className="grid gap-3">
+              <dl className="grid gap-4">
                 {project.links.map((link) => (
                   <div
                     key={link.label}
-                    className="rounded-lg border border-blue-300/15 bg-blue-300/[0.06] px-4 py-3"
+                    className="soft-card rounded-lg px-4 py-3"
                   >
-                    <dt className="text-xs font-bold uppercase tracking-[0.16em] text-blue-100">
+                    <dt className="accent-text text-xs font-bold uppercase tracking-[0.16em]">
                       {link.label}
                     </dt>
-                    <dd className="mt-1 text-sm font-medium leading-6 text-slate-200">
+                    <dd className="body-copy mt-1 text-sm font-medium leading-6">
                       {link.text}
                     </dd>
                   </div>
@@ -208,7 +207,8 @@ export default function ProjectsSection() {
             </ProjectDetail>
           </div>
         </article>
-      </div>
-    </section>
+        </div>
+      </section>
+    </RevealOnScroll>
   );
 }
