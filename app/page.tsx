@@ -1,9 +1,11 @@
 import AboutSection from "@/components/about-section";
+import SkillsSection from "@/components/skills-section";
 
 export default function Home() {
   const navLinks = [
     { label: "Home", href: "#home" },
     { label: "About", href: "#about" },
+    { label: "Skills", href: "#skills" },
     { label: "Contact", href: "mailto:chaniruweerasuriya@gmail.com" },
   ];
 
@@ -167,6 +169,7 @@ export default function Home() {
           </aside>
         </section>
         <AboutSection />
+        <SkillsSection />
       </main>
     </div>
   );
