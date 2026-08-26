@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chaniru Weerasuriya  Personal Portfolio
 
-## Getting Started
+This is the personal portfolio of Chaniru Weerasuriya, a BSc (Hons) Software Engineering undergraduate at NSBM Green University and an aspiring Cloud and DevOps Engineer.
 
-First, run the development server:
+## Portfolio Sections
+
+- Hero
+- About
+- Skills and Tools
+- Projects
+- Education
+- Contact
+
+## Technology Stack
+
+- Next.js 16
+- TypeScript
+- Tailwind CSS
+- React
+- Git and GitHub
+
+## Current Featured Project
+
+- University ERP System
+- University group project
+- Contributed to backend development, API development, database integration, authentication, and role-based access-control
+
+Repository and live-demo links are not available yet.
+
+## Running Locally
 
 ```bash
+git clone https://github.com/chaniru73/personal-portfolio.git
+cd personal-portfolio
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The website will normally be available at:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Available Scripts
 
-## Learn More
+- `npm run dev`
+- `npm run lint`
+- `npm run build`
+- `npm run start`
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `app/` contains the main Next.js app routes, layout, and global styles.
+- `components/` contains reusable portfolio section components.
+- `public/` is reserved for static assets such as images and icons.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Current Status
 
-## Deploy on Vercel
+Version 1 contains the main portfolio sections. Project repository links, screenshots, and further improvements will be added later.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contact
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- GitHub: https://github.com/chaniru73
+- LinkedIn: https://www.linkedin.com/in/chaniru-weerasuriya-a89607373
+- Email: chaniruweerasuriya@gmail.com
