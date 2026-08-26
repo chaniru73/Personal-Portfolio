@@ -2,6 +2,10 @@
 
 This is the personal portfolio of Chaniru Weerasuriya, a BSc (Hons) Software Engineering undergraduate at NSBM Green University and an aspiring Cloud and DevOps Engineer.
 
+## Live Portfolio
+
+[View Live Portfolio](https://personal-portfolio-puce-nine-62.vercel.app)
+
 ## Portfolio Sections
 
 - Hero
@@ -57,7 +61,7 @@ http://localhost:3000
 
 ## Current Status
 
-Version 1 contains the main portfolio sections. Project repository links, screenshots, and further improvements will be added later.
+Version 1 contains the main portfolio sections and is deployed on Vercel. Project repository links, screenshots, and further improvements will be added later.
 
 ## Contact
 
