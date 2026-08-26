@@ -1,4 +1,5 @@
 import AboutSection from "@/components/about-section";
+import ProjectsSection from "@/components/projects-section";
 import SkillsSection from "@/components/skills-section";
 
 export default function Home() {
@@ -6,6 +7,7 @@ export default function Home() {
     { label: "Home", href: "#home" },
     { label: "About", href: "#about" },
     { label: "Skills", href: "#skills" },
+    { label: "Projects", href: "#projects" },
     { label: "Contact", href: "mailto:chaniruweerasuriya@gmail.com" },
   ];
 
@@ -44,7 +46,26 @@ export default function Home() {
             CW
           </a>
 
-          <ul className="flex flex-wrap items-center justify-end gap-2 text-sm font-medium text-slate-300 sm:gap-3">
+          <details className="relative sm:hidden">
+            <summary className="cursor-pointer rounded-lg border border-cyan-300/20 bg-cyan-300/10 px-3 py-2 text-sm font-bold text-cyan-100 transition hover:border-cyan-200/50 hover:bg-cyan-300/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300">
+              Menu
+            </summary>
+            <ul className="absolute right-0 top-full z-20 mt-3 grid w-52 max-w-[calc(100vw-2.5rem)] gap-1 rounded-lg border border-cyan-300/15 bg-slate-950/95 p-2 text-sm font-medium text-slate-300 shadow-2xl shadow-cyan-950/30 backdrop-blur">
+              {navLinks.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    aria-label={link.label}
+                    className="block rounded-lg px-3 py-2 transition hover:bg-cyan-300/10 hover:text-cyan-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+
+          <ul className="hidden flex-wrap items-center justify-end gap-2 text-sm font-medium text-slate-300 sm:flex sm:gap-3">
             {navLinks.map((link) => (
               <li key={link.label}>
                 <a
@@ -170,6 +191,7 @@ export default function Home() {
         </section>
         <AboutSection />
         <SkillsSection />
+        <ProjectsSection />
       </main>
     </div>
   );
