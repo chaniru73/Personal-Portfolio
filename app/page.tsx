@@ -1,5 +1,8 @@
 import AboutSection from "@/components/about-section";
+import ContactSection from "@/components/contact-section";
+import EducationSection from "@/components/education-section";
 import ProjectsSection from "@/components/projects-section";
+import SiteFooter from "@/components/site-footer";
 import SkillsSection from "@/components/skills-section";
 
 export default function Home() {
@@ -8,7 +11,8 @@ export default function Home() {
     { label: "About", href: "#about" },
     { label: "Skills", href: "#skills" },
     { label: "Projects", href: "#projects" },
-    { label: "Contact", href: "mailto:chaniruweerasuriya@gmail.com" },
+    { label: "Education", href: "#education" },
+    { label: "Contact", href: "#contact" },
   ];
 
   const workflow = ["Code", "Build", "Deploy", "Monitor"];
@@ -46,7 +50,7 @@ export default function Home() {
             CW
           </a>
 
-          <details className="relative sm:hidden">
+          <details className="relative md:hidden">
             <summary className="cursor-pointer rounded-lg border border-cyan-300/20 bg-cyan-300/10 px-3 py-2 text-sm font-bold text-cyan-100 transition hover:border-cyan-200/50 hover:bg-cyan-300/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300">
               Menu
             </summary>
@@ -65,7 +69,7 @@ export default function Home() {
             </ul>
           </details>
 
-          <ul className="hidden flex-wrap items-center justify-end gap-2 text-sm font-medium text-slate-300 sm:flex sm:gap-3">
+          <ul className="hidden flex-wrap items-center justify-end gap-2 text-sm font-medium text-slate-300 md:flex md:gap-3">
             {navLinks.map((link) => (
               <li key={link.label}>
                 <a
@@ -192,7 +196,10 @@ export default function Home() {
         <AboutSection />
         <SkillsSection />
         <ProjectsSection />
+        <EducationSection />
+        <ContactSection />
       </main>
+      <SiteFooter />
     </div>
   );
 }
