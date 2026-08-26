@@ -1,16 +1,9 @@
+import AboutSection from "@/components/about-section";
+
 export default function Home() {
   const navLinks = [
     { label: "Home", href: "#home" },
-    {
-      label: "GitHub",
-      href: "https://github.com/chaniru73",
-      external: true,
-    },
-    {
-      label: "LinkedIn",
-      href: "https://www.linkedin.com/in/chaniru-weerasuriya-a89607373",
-      external: true,
-    },
+    { label: "About", href: "#about" },
     { label: "Contact", href: "mailto:chaniruweerasuriya@gmail.com" },
   ];
 
@@ -54,13 +47,7 @@ export default function Home() {
               <li key={link.label}>
                 <a
                   href={link.href}
-                  target={link.external ? "_blank" : undefined}
-                  rel={link.external ? "noopener noreferrer" : undefined}
-                  aria-label={
-                    link.external
-                      ? `${link.label} profile opens in a new tab`
-                      : link.label
-                  }
+                  aria-label={link.label}
                   className="rounded-lg px-3 py-2 transition hover:bg-cyan-300/10 hover:text-cyan-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
                 >
                   {link.label}
@@ -71,10 +58,11 @@ export default function Home() {
         </nav>
       </header>
 
-      <main id="home" className="relative z-10 flex flex-1 items-center">
+      <main className="relative z-10 flex flex-1 flex-col">
         <section
+          id="home"
           aria-labelledby="hero-title"
-          className="mx-auto grid w-full max-w-6xl gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:py-28"
+          className="mx-auto grid min-h-[calc(100vh-77px)] w-full max-w-6xl gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:py-28"
         >
           <div className="max-w-3xl">
             <p className="mb-5 inline-flex rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-sm font-medium text-cyan-100 shadow-[0_0_24px_rgba(34,211,238,0.08)]">
@@ -178,6 +166,7 @@ export default function Home() {
             </div>
           </aside>
         </section>
+        <AboutSection />
       </main>
     </div>
   );
