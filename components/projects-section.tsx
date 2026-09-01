@@ -7,6 +7,7 @@ import {
   GitBranchIcon,
   LayersIcon,
 } from "@/components/icons";
+import RevealOnScroll from "@/components/reveal-on-scroll";
 
 const project = {
   number: "Project 01",
@@ -60,13 +61,19 @@ function ProjectDetail({
   title,
   children,
   icon: Icon,
+  delay,
 }: {
   title: string;
   children: ReactNode;
   icon?: typeof CheckIcon;
+  delay?: number;
 }) {
   return (
-    <section aria-labelledby={`${title.toLowerCase().replaceAll(" ", "-")}-title`}>
+    <RevealOnScroll
+      as="section"
+      delay={delay}
+      aria-labelledby={`${title.toLowerCase().replaceAll(" ", "-")}-title`}
+    >
       <div className="flex items-center gap-3">
         {Icon ? (
           <span className="icon-bubble icon-bubble-sm">
@@ -83,7 +90,7 @@ function ProjectDetail({
       <div className="body-copy mt-3 text-sm leading-7 sm:text-base">
         {children}
       </div>
-    </section>
+    </RevealOnScroll>
   );
 }
 
@@ -92,10 +99,10 @@ export default function ProjectsSection() {
     <section
       id="projects"
       aria-labelledby="projects-title"
-      className="section-shell projects-panel page-panel relative px-5 py-10 sm:px-8"
+      className="section-shell projects-panel section-frame page-panel relative px-5 py-8 sm:px-8"
     >
       <div className="relative mx-auto w-full max-w-6xl">
-        <div className="stagger-item stagger-delay-1 max-w-3xl">
+        <RevealOnScroll className="max-w-3xl">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             Projects
           </p>
@@ -111,10 +118,15 @@ export default function ProjectsSection() {
             A selection of university and personal projects where I have applied
             software development concepts to practical problems.
           </p>
-        </div>
+        </RevealOnScroll>
 
-        <article className="stagger-item stagger-delay-2 surface-card card-hover project-card group mt-8 grid min-w-0 gap-6 rounded-2xl p-5 sm:p-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="min-w-0">
+        <RevealOnScroll
+          as="article"
+          variant="scale-in"
+          delay={120}
+          className="surface-card card-hover project-card group mt-5 grid min-w-0 gap-6 rounded-2xl p-5 sm:p-6 lg:grid-cols-[0.9fr_1.1fr]"
+        >
+          <RevealOnScroll variant="fade-left" delay={220} className="min-w-0">
             <div className="flex min-w-0 flex-wrap items-center gap-2.5">
               <span className="meta-badge text-xs font-bold uppercase">
                 {project.number}
@@ -162,18 +174,22 @@ export default function ProjectsSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </RevealOnScroll>
 
           <div className="grid min-w-0 gap-6 lg:grid-cols-2">
-            <ProjectDetail title="Problem" icon={LayersIcon}>
+            <ProjectDetail title="Problem" icon={LayersIcon} delay={300}>
               <p>{project.problem}</p>
             </ProjectDetail>
 
-            <ProjectDetail title="My contribution" icon={DatabaseIcon}>
+            <ProjectDetail
+              title="My contribution"
+              icon={DatabaseIcon}
+              delay={380}
+            >
               <p>{project.contribution}</p>
             </ProjectDetail>
 
-            <ProjectDetail title="Key features" icon={CheckIcon}>
+            <ProjectDetail title="Key features" icon={CheckIcon} delay={460}>
               <ul className="grid gap-3">
                 {project.keyFeatures.map((feature) => (
                   <li key={feature} className="flex min-w-0 gap-3">
@@ -187,7 +203,7 @@ export default function ProjectsSection() {
               </ul>
             </ProjectDetail>
 
-            <ProjectDetail title="Technologies" icon={LayersIcon}>
+            <ProjectDetail title="Technologies" icon={LayersIcon} delay={540}>
               <ul className="tag-list mt-5">
                 {project.technologies.map((technology) => (
                   <li key={technology} className="min-w-0 max-w-full">
@@ -197,7 +213,7 @@ export default function ProjectsSection() {
               </ul>
             </ProjectDetail>
 
-            <ProjectDetail title="Links">
+            <ProjectDetail title="Links" delay={620}>
               <dl className="grid gap-4">
                 {project.links.map((link) => {
                   const Icon =
@@ -221,7 +237,7 @@ export default function ProjectsSection() {
               </dl>
             </ProjectDetail>
           </div>
-        </article>
+        </RevealOnScroll>
       </div>
     </section>
   );

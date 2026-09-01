@@ -5,7 +5,7 @@ import {
   MailIcon,
   UserIcon,
 } from "@/components/icons";
-import SiteFooter from "@/components/site-footer";
+import RevealOnScroll from "@/components/reveal-on-scroll";
 
 const contactDetails = [
   {
@@ -43,10 +43,10 @@ export default function ContactSection() {
     <section
       id="contact"
       aria-labelledby="contact-title"
-      className="section-shell contact-panel page-panel relative flex flex-col"
+      className="section-shell contact-panel section-frame page-panel relative px-5 py-8 sm:px-8"
     >
-      <div className="relative mx-auto grid w-full max-w-6xl flex-1 gap-8 px-5 py-10 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-        <div className="panel-column-left stagger-item stagger-delay-1">
+      <div className="relative mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+        <RevealOnScroll variant="fade-left">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             Contact
           </p>
@@ -73,19 +73,24 @@ export default function ContactSection() {
               Send an Email
             </a>
           </div>
-        </div>
+        </RevealOnScroll>
 
-        <aside
+        <RevealOnScroll
+          as="aside"
           aria-label="Contact information"
-          className="panel-column-right stagger-item stagger-delay-2 surface-card contact-card min-w-0 rounded-2xl p-5 sm:p-6"
+          variant="fade-right"
+          delay={120}
+          className="surface-card contact-card min-w-0 rounded-2xl p-5 sm:p-6"
         >
           <dl className="grid min-w-0 gap-3">
-            {contactDetails.map((detail) => {
+            {contactDetails.map((detail, index) => {
               const Icon = detail.icon;
 
               return (
-                <div
+                <RevealOnScroll
+                  as="div"
                   key={detail.label}
+                  delay={220 + index * 80}
                   className="soft-card min-w-0 rounded-xl px-4 py-3"
                 >
                   <dt className="accent-text flex items-center gap-2 text-xs font-bold uppercase">
@@ -95,12 +100,12 @@ export default function ContactSection() {
                   <dd className="card-title mt-1 break-words text-sm font-semibold leading-6">
                     {detail.value}
                   </dd>
-                </div>
+                </RevealOnScroll>
               );
             })}
           </dl>
 
-          <div className="mt-5 flex min-w-0 flex-wrap gap-3">
+          <RevealOnScroll delay={500} className="mt-5 flex min-w-0 flex-wrap gap-3">
             {profileLinks.map((link) => {
               const Icon = link.icon;
 
@@ -119,10 +124,9 @@ export default function ContactSection() {
                 </a>
               );
             })}
-          </div>
-        </aside>
+          </RevealOnScroll>
+        </RevealOnScroll>
       </div>
-      <SiteFooter />
     </section>
   );
 }

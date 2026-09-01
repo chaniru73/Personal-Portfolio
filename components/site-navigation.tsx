@@ -1,10 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { MenuIcon } from "@/components/icons";
 
-type PanelHref =
+type SectionHref =
   | "#home"
   | "#about"
   | "#skills"
@@ -19,18 +19,92 @@ const navLinks = [
   { label: "Projects", href: "#projects" },
   { label: "Education", href: "#education" },
   { label: "Contact", href: "#contact" },
-] as const satisfies readonly { label: string; href: PanelHref }[];
+] as const satisfies readonly { label: string; href: SectionHref }[];
 
-type SiteNavigationProps = {
-  activeHref: PanelHref;
-  onNavigate: (href: PanelHref) => void;
-};
+const sectionIds = navLinks.map((link) => link.href.slice(1));
 
-export default function SiteNavigation({
-  activeHref,
-  onNavigate,
-}: SiteNavigationProps) {
+function getHashHref(): SectionHref {
+  const hash = window.location.hash as SectionHref;
+  return navLinks.some((link) => link.href === hash) ? hash : "#home";
+}
+
+export default function SiteNavigation() {
+  const [activeHref, setActiveHref] = useState<SectionHref>("#home");
   const mobileMenuRef = useRef<HTMLDetailsElement>(null);
+
+  useEffect(() => {
+    const updateFromHash = () => {
+      setActiveHref(getHashHref());
+    };
+
+    updateFromHash();
+
+    const observers: IntersectionObserver[] = [];
+    const intersectionRatios = new Map<string, number>();
+
+    const createObserver = () => {
+      observers.forEach((observer) => observer.disconnect());
+      observers.length = 0;
+      intersectionRatios.clear();
+
+      const headerHeight = Number.parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          "--header-height",
+        ),
+      );
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            intersectionRatios.set(
+              entry.target.id,
+              entry.isIntersecting ? entry.intersectionRatio : 0,
+            );
+          });
+
+          let nextId = "home";
+          let strongestRatio = 0;
+
+          sectionIds.forEach((id) => {
+            const ratio = intersectionRatios.get(id) ?? 0;
+
+            if (ratio > strongestRatio) {
+              strongestRatio = ratio;
+              nextId = id;
+            }
+          });
+
+          if (strongestRatio > 0) {
+            setActiveHref(`#${nextId}` as SectionHref);
+          }
+        },
+        {
+          rootMargin: `-${headerHeight + 24}px 0px -42% 0px`,
+          threshold: [0, 0.12, 0.28, 0.5, 0.72],
+        },
+      );
+
+      sectionIds.forEach((id) => {
+        const section = document.getElementById(id);
+
+        if (section) {
+          observer.observe(section);
+        }
+      });
+
+      observers.push(observer);
+    };
+
+    createObserver();
+    window.addEventListener("hashchange", updateFromHash);
+    window.addEventListener("resize", createObserver);
+
+    return () => {
+      observers.forEach((observer) => observer.disconnect());
+      window.removeEventListener("hashchange", updateFromHash);
+      window.removeEventListener("resize", createObserver);
+    };
+  }, []);
 
   const closeMobileMenu = () => {
     mobileMenuRef.current?.removeAttribute("open");
@@ -47,10 +121,7 @@ export default function SiteNavigation({
         href={link.href}
         aria-label={link.label}
         aria-current={isActive ? "location" : undefined}
-        onClick={(event) => {
-          event.preventDefault();
-          onNavigate(link.href);
-
+        onClick={() => {
           if (mode === "mobile") {
             closeMobileMenu();
           }
@@ -67,14 +138,12 @@ export default function SiteNavigation({
   return (
     <nav
       aria-label="Primary navigation"
-      className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8"
+      className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5 sm:px-8"
     >
       <a
         href="#home"
         aria-label="CW home"
-        onClick={(event) => {
-          event.preventDefault();
-          onNavigate("#home");
+        onClick={() => {
           closeMobileMenu();
         }}
         className="brand-mark focus-ring flex h-11 w-11 items-center justify-center rounded-xl text-sm font-bold tracking-wide transition"

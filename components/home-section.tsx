@@ -6,6 +6,7 @@ import {
   LinkedinLogo,
   MonitorIcon,
 } from "@/components/icons";
+import RevealOnScroll from "@/components/reveal-on-scroll";
 
 const workflow = [
   { label: "Code", icon: CodeIcon },
@@ -19,59 +20,79 @@ export default function HomeSection() {
     <section
       id="home"
       aria-labelledby="hero-title"
-      className="hero-section page-panel mx-auto grid w-full max-w-6xl gap-8 px-5 py-10 sm:px-8 lg:grid-cols-[1.06fr_0.94fr] lg:items-center"
+      className="hero-section section-frame page-panel mx-auto grid w-full max-w-6xl gap-8 px-5 py-8 sm:px-8 lg:grid-cols-[1.06fr_0.94fr] lg:items-center"
     >
       <div className="max-w-3xl">
-        <p className="hero-sequence hero-delay-1 availability-pill mb-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold">
+        <RevealOnScroll
+          as="p"
+          delay={40}
+          className="availability-pill mb-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold"
+        >
           <span aria-hidden="true" className="availability-dot" />
           Hello, I&apos;m
-        </p>
+        </RevealOnScroll>
 
-        <h1
+        <RevealOnScroll
+          as="h1"
           id="hero-title"
-          className="hero-sequence hero-delay-2 hero-title text-4xl font-bold tracking-normal sm:text-5xl lg:text-6xl"
+          delay={120}
+          className="hero-title text-4xl font-bold tracking-normal sm:text-5xl lg:text-6xl"
         >
           Chaniru <span className="text-emerald">Weerasuriya</span>
-        </h1>
+        </RevealOnScroll>
 
-        <p className="hero-sequence hero-delay-3 accent-text mt-5 max-w-2xl text-xl font-semibold leading-8 sm:text-2xl">
+        <RevealOnScroll
+          as="p"
+          delay={200}
+          className="accent-text mt-5 max-w-2xl text-xl font-semibold leading-8 sm:text-2xl"
+        >
           Software Engineering Undergraduate | Aspiring Cloud &amp; DevOps
           Engineer
-        </p>
+        </RevealOnScroll>
 
-        <p className="hero-sequence hero-delay-4 body-copy mt-5 max-w-2xl text-base leading-8 sm:text-lg">
+        <RevealOnScroll
+          as="p"
+          delay={280}
+          className="body-copy mt-5 max-w-2xl text-base leading-8 sm:text-lg"
+        >
           I&apos;m a Software Engineering undergraduate at NSBM Green University
           with a growing focus on Cloud and DevOps. I enjoy building practical
           applications, exploring backend systems, and learning how modern
           software is developed, deployed, and maintained.
-        </p>
+        </RevealOnScroll>
 
-        <p className="hero-sequence hero-delay-5 location-label mt-5 text-sm font-bold uppercase">
+        <RevealOnScroll
+          as="p"
+          delay={360}
+          className="location-label mt-5 text-sm font-bold uppercase"
+        >
           Malabe, Sri Lanka
-        </p>
+        </RevealOnScroll>
 
-        <div className="hero-sequence hero-delay-6 mt-8 flex flex-col gap-3 sm:flex-row">
+        <RevealOnScroll
+          delay={440}
+          className="mt-8 flex flex-col gap-3 sm:flex-row"
+        >
           <a
-            href="https://github.com/chaniru73"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Explore my work on GitHub, opens in a new tab"
+            href="#projects"
+            aria-label="Explore my work projects"
             className="primary-button focus-ring inline-flex min-h-12 w-full items-center justify-center rounded-xl px-5 py-3 text-sm font-bold transition sm:w-auto"
           >
             Explore My Work
           </a>
           <a
-            href="mailto:chaniruweerasuriya@gmail.com"
-            aria-label="Contact me by email"
+            href="#contact"
+            aria-label="Contact me"
             className="secondary-button focus-ring inline-flex min-h-12 w-full items-center justify-center rounded-xl px-5 py-3 text-sm font-bold transition sm:w-auto"
           >
             Contact Me
           </a>
-        </div>
+        </RevealOnScroll>
 
-        <div
+        <RevealOnScroll
           aria-label="Social links"
-          className="hero-sequence hero-delay-7 mt-7 flex flex-wrap gap-3"
+          delay={520}
+          className="mt-7 flex flex-wrap gap-3"
         >
           <a
             href="https://github.com/chaniru73"
@@ -95,14 +116,18 @@ export default function HomeSection() {
             <LinkedinLogo className="h-5 w-5" />
             <span className="sr-only">LinkedIn</span>
           </a>
-        </div>
+        </RevealOnScroll>
       </div>
 
       <aside
         aria-label="CW profile placeholder and software delivery workflow"
         className="hero-visual flex flex-col items-center justify-center gap-6"
       >
-        <div className="profile-orbit relative flex items-center justify-center">
+        <RevealOnScroll
+          variant="scale-in"
+          delay={360}
+          className="profile-orbit relative flex items-center justify-center"
+        >
           <span aria-hidden="true" className="orbit-ring" />
           <span aria-hidden="true" className="orbit-marker orbit-marker-one" />
           <span aria-hidden="true" className="orbit-marker orbit-marker-two" />
@@ -113,15 +138,17 @@ export default function HomeSection() {
               CW
             </span>
           </div>
-        </div>
+        </RevealOnScroll>
 
         <ol className="grid w-full max-w-lg grid-cols-2 gap-3 sm:grid-cols-4">
           {workflow.map((step, index) => {
             const Icon = step.icon;
 
             return (
-              <li
+              <RevealOnScroll
+                as="li"
                 key={step.label}
+                delay={560 + index * 70}
                 className="workflow-label soft-card rounded-xl px-3 py-3 text-center text-sm font-bold"
               >
                 <span className="icon-bubble mx-auto mb-2">
@@ -131,7 +158,7 @@ export default function HomeSection() {
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 {step.label}
-              </li>
+              </RevealOnScroll>
             );
           })}
         </ol>

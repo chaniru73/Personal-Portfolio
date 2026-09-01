@@ -1,4 +1,5 @@
 import { GithubLogo, LinkedinLogo } from "@/components/icons";
+import RevealOnScroll from "@/components/reveal-on-scroll";
 
 const footerLinks = [
   {
@@ -17,7 +18,11 @@ export default function SiteFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="footer-shell relative z-10 mt-auto px-5 py-5 text-sm sm:px-8">
+    <RevealOnScroll
+      as="footer"
+      delay={80}
+      className="footer-shell relative z-10 px-5 py-5 text-sm sm:px-8"
+    >
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div className="min-w-0">
           <p className="font-semibold text-white">
@@ -60,6 +65,6 @@ export default function SiteFooter() {
           </ul>
         </nav>
       </div>
-    </footer>
+    </RevealOnScroll>
   );
 }

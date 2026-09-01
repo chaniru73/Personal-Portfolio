@@ -3,6 +3,7 @@ import {
   EducationIcon,
   StrengthIcon,
 } from "@/components/icons";
+import RevealOnScroll from "@/components/reveal-on-scroll";
 
 const education = [
   "BSc (Hons) in Software Engineering",
@@ -35,13 +36,15 @@ function DetailList({
   title,
   items,
   icon: Icon,
+  delay,
 }: {
   title: string;
   items: readonly string[];
   icon: typeof EducationIcon;
+  delay: number;
 }) {
   return (
-    <div className="info-group">
+    <RevealOnScroll delay={delay} className="info-group">
       <div className="flex items-center gap-3">
         <span className="icon-bubble">
           <Icon className="h-5 w-5" />
@@ -59,7 +62,7 @@ function DetailList({
           </li>
         ))}
       </ul>
-    </div>
+    </RevealOnScroll>
   );
 }
 
@@ -68,10 +71,10 @@ export default function AboutSection() {
     <section
       id="about"
       aria-labelledby="about-title"
-      className="section-shell page-panel relative px-5 py-10 sm:px-8"
+      className="section-shell about-panel section-frame page-panel relative px-5 py-8 sm:px-8"
     >
       <div className="relative mx-auto grid w-full max-w-6xl gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-        <div className="panel-column-left stagger-item stagger-delay-1">
+        <RevealOnScroll variant="fade-left">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             About Me
           </p>
@@ -104,33 +107,43 @@ export default function AboutSection() {
               knowledge, supported by real-world industry experience.
             </p>
           </div>
-        </div>
+        </RevealOnScroll>
 
-        <aside
+        <RevealOnScroll
+          as="aside"
           aria-label="About information"
-          className="panel-column-right stagger-item stagger-delay-2 surface-card elevated-info-card rounded-2xl p-5 sm:p-6"
+          variant="fade-right"
+          delay={120}
+          className="surface-card elevated-info-card rounded-2xl p-5 sm:p-6"
         >
           <div className="grid gap-6">
-            <DetailList title="Education" items={education} icon={EducationIcon} />
+            <DetailList
+              title="Education"
+              items={education}
+              icon={EducationIcon}
+              delay={220}
+            />
             <DetailList
               title="Currently learning"
               items={currentlyLearning}
               icon={BookIcon}
+              delay={300}
             />
             <DetailList
               title="Core strengths"
               items={coreStrengths}
               icon={StrengthIcon}
+              delay={380}
             />
           </div>
-        </aside>
+        </RevealOnScroll>
 
-        <div className="stagger-item stagger-delay-3 lg:col-span-2">
+        <RevealOnScroll delay={460} className="lg:col-span-2">
           <p className="soft-card rounded-2xl px-5 py-4 text-sm font-semibold leading-7 text-[var(--color-heading)] sm:text-base">
             I&apos;m open to Software Engineering, Backend Development, Cloud,
             and DevOps internships or entry-level opportunities.
           </p>
-        </div>
+        </RevealOnScroll>
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
 import { BookIcon, EducationIcon, StrengthIcon } from "@/components/icons";
+import RevealOnScroll from "@/components/reveal-on-scroll";
 
 const educationDetails = [
   {
@@ -37,10 +38,10 @@ export default function EducationSection() {
     <section
       id="education"
       aria-labelledby="education-title"
-      className="section-shell education-panel page-panel relative px-5 py-10 sm:px-8"
+      className="section-shell education-panel section-frame page-panel relative px-5 py-8 sm:px-8"
     >
       <div className="relative mx-auto grid w-full max-w-6xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-        <div className="panel-column-left stagger-item stagger-delay-1">
+        <RevealOnScroll variant="fade-left">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             Education
           </p>
@@ -57,9 +58,14 @@ export default function EducationSection() {
             software development, system design, security, data, and
             user-centred technology.
           </p>
-        </div>
+        </RevealOnScroll>
 
-        <article className="panel-column-right stagger-item stagger-delay-2 surface-card card-hover education-card min-w-0 rounded-2xl p-5 sm:p-6">
+        <RevealOnScroll
+          as="article"
+          variant="fade-right"
+          delay={120}
+          className="surface-card card-hover education-card min-w-0 rounded-2xl p-5 sm:p-6"
+        >
           <div className="timeline-node" aria-hidden="true" />
           <div className="flex min-w-0 flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -76,9 +82,11 @@ export default function EducationSection() {
           </div>
 
           <dl className="mt-6 grid min-w-0 gap-3 sm:grid-cols-2">
-            {educationDetails.map((detail) => (
-              <div
+            {educationDetails.map((detail, index) => (
+              <RevealOnScroll
+                as="div"
                 key={detail.label}
+                delay={240 + index * 70}
                 className="soft-card min-w-0 rounded-xl px-4 py-3"
               >
                 <dt className="accent-text text-xs font-bold uppercase">
@@ -87,11 +95,11 @@ export default function EducationSection() {
                 <dd className="card-title mt-1 break-words text-sm font-semibold leading-6">
                   {detail.value}
                 </dd>
-              </div>
+              </RevealOnScroll>
             ))}
           </dl>
 
-          <div className="mt-7">
+          <RevealOnScroll delay={620} className="mt-7">
             <div className="flex items-center gap-3">
               <span className="icon-bubble icon-bubble-sm">
                 <BookIcon className="h-4.5 w-4.5" />
@@ -109,19 +117,23 @@ export default function EducationSection() {
                 </li>
               ))}
             </ul>
-          </div>
+          </RevealOnScroll>
 
-          <p className="soft-card mt-7 rounded-xl px-4 py-3 text-sm font-medium leading-7 text-[var(--color-heading)] sm:text-base">
+          <RevealOnScroll
+            as="p"
+            delay={700}
+            className="soft-card mt-7 rounded-xl px-4 py-3 text-sm font-medium leading-7 text-[var(--color-heading)] sm:text-base"
+          >
             <StrengthIcon className="mr-2 inline h-4.5 w-4.5 align-[-0.15em] text-[var(--color-accent)]" />
             I&apos;m developing practical experience through university projects and
             technical coursework while strengthening my software engineering,
             backend, Cloud, and DevOps knowledge.
-          </p>
-          <p className="body-copy mt-4 text-sm leading-6">
+          </RevealOnScroll>
+          <RevealOnScroll as="p" delay={780} className="body-copy mt-4 text-sm leading-6">
             Additional certifications are not currently listed in this
             portfolio.
-          </p>
-        </article>
+          </RevealOnScroll>
+        </RevealOnScroll>
       </div>
     </section>
   );
