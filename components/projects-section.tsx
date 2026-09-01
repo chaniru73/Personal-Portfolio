@@ -1,6 +1,12 @@
 import type { ReactNode } from "react";
 
-import RevealOnScroll from "@/components/reveal-on-scroll";
+import {
+  CheckIcon,
+  DatabaseIcon,
+  ExternalIcon,
+  GitBranchIcon,
+  LayersIcon,
+} from "@/components/icons";
 
 const project = {
   number: "Project 01",
@@ -53,18 +59,27 @@ function TechnologyTag({ technology }: { technology: string }) {
 function ProjectDetail({
   title,
   children,
+  icon: Icon,
 }: {
   title: string;
   children: ReactNode;
+  icon?: typeof CheckIcon;
 }) {
   return (
     <section aria-labelledby={`${title.toLowerCase().replaceAll(" ", "-")}-title`}>
-      <h4
-        id={`${title.toLowerCase().replaceAll(" ", "-")}-title`}
-        className="accent-text text-sm font-bold uppercase tracking-[0.16em]"
-      >
-        {title}
-      </h4>
+      <div className="flex items-center gap-3">
+        {Icon ? (
+          <span className="icon-bubble icon-bubble-sm">
+            <Icon className="h-4.5 w-4.5" />
+          </span>
+        ) : null}
+        <h4
+          id={`${title.toLowerCase().replaceAll(" ", "-")}-title`}
+          className="accent-text text-sm font-bold uppercase"
+        >
+          {title}
+        </h4>
+      </div>
       <div className="body-copy mt-3 text-sm leading-7 sm:text-base">
         {children}
       </div>
@@ -74,17 +89,11 @@ function ProjectDetail({
 
 export default function ProjectsSection() {
   return (
-    <RevealOnScroll delay={160} variant="fade-left">
-      <section
-        id="projects"
-        aria-labelledby="projects-title"
-        className="section-shell page-panel relative px-5 py-20 sm:px-8 lg:py-28"
-      >
-        <div
-          aria-hidden="true"
-          className="section-divider pointer-events-none absolute inset-x-0 top-0 h-px"
-        />
-
+    <section
+      id="projects"
+      aria-labelledby="projects-title"
+      className="section-shell projects-panel page-panel relative px-5 py-10 sm:px-8"
+    >
       <div className="relative mx-auto w-full max-w-6xl">
         <div className="stagger-item stagger-delay-1 max-w-3xl">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
@@ -104,16 +113,16 @@ export default function ProjectsSection() {
           </p>
         </div>
 
-        <article className="stagger-item stagger-delay-2 surface-card card-hover group mt-12 grid min-w-0 gap-6 rounded-lg p-5 sm:p-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <article className="stagger-item stagger-delay-2 surface-card card-hover project-card group mt-8 grid min-w-0 gap-6 rounded-2xl p-5 sm:p-6 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="min-w-0">
             <div className="flex min-w-0 flex-wrap items-center gap-2.5">
-              <span className="meta-badge text-xs font-bold uppercase tracking-[0.16em]">
+              <span className="meta-badge text-xs font-bold uppercase">
                 {project.number}
               </span>
-              <span className="meta-badge text-xs font-bold uppercase tracking-[0.16em]">
+              <span className="meta-badge text-xs font-bold uppercase">
                 {project.type}
               </span>
-              <span className="status-badge rounded-md px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em]">
+              <span className="status-badge rounded-md px-3 py-1.5 text-xs font-bold uppercase">
                 {project.status}
               </span>
             </div>
@@ -128,13 +137,13 @@ export default function ProjectsSection() {
 
             <div
               aria-label="Project visual placeholder"
-              className="project-visual mt-6 overflow-hidden rounded-lg p-4"
+              className="project-visual mt-6 overflow-hidden rounded-2xl p-4"
             >
-              <div className="rounded-md border border-[var(--color-border-soft)] bg-white p-4">
+              <div className="project-window rounded-xl p-4">
                 <div className="mb-5 flex items-center gap-2">
-                  <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-border)]" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-accent-light)]" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-accent)]" />
+                  <span className="window-dot" />
+                  <span className="window-dot window-dot-muted" />
+                  <span className="window-dot window-dot-accent" />
                 </div>
                 <p className="card-title text-lg font-bold">
                   University ERP System
@@ -155,16 +164,16 @@ export default function ProjectsSection() {
             </div>
           </div>
 
-          <div className="grid min-w-0 gap-6">
-            <ProjectDetail title="Problem">
+          <div className="grid min-w-0 gap-6 lg:grid-cols-2">
+            <ProjectDetail title="Problem" icon={LayersIcon}>
               <p>{project.problem}</p>
             </ProjectDetail>
 
-            <ProjectDetail title="My contribution">
+            <ProjectDetail title="My contribution" icon={DatabaseIcon}>
               <p>{project.contribution}</p>
             </ProjectDetail>
 
-            <ProjectDetail title="Key features">
+            <ProjectDetail title="Key features" icon={CheckIcon}>
               <ul className="grid gap-3">
                 {project.keyFeatures.map((feature) => (
                   <li key={feature} className="flex min-w-0 gap-3">
@@ -178,7 +187,7 @@ export default function ProjectsSection() {
               </ul>
             </ProjectDetail>
 
-            <ProjectDetail title="Technologies">
+            <ProjectDetail title="Technologies" icon={LayersIcon}>
               <ul className="tag-list mt-5">
                 {project.technologies.map((technology) => (
                   <li key={technology} className="min-w-0 max-w-full">
@@ -190,25 +199,30 @@ export default function ProjectsSection() {
 
             <ProjectDetail title="Links">
               <dl className="grid gap-4">
-                {project.links.map((link) => (
-                  <div
-                    key={link.label}
-                    className="soft-card rounded-lg px-4 py-3"
-                  >
-                    <dt className="accent-text text-xs font-bold uppercase tracking-[0.16em]">
-                      {link.label}
-                    </dt>
-                    <dd className="body-copy mt-1 text-sm font-medium leading-6">
-                      {link.text}
-                    </dd>
-                  </div>
-                ))}
+                {project.links.map((link) => {
+                  const Icon =
+                    link.label === "Repository" ? GitBranchIcon : ExternalIcon;
+
+                  return (
+                    <div
+                      key={link.label}
+                      className="soft-card rounded-xl px-4 py-3"
+                    >
+                      <dt className="accent-text flex items-center gap-2 text-xs font-bold uppercase">
+                        <Icon className="h-4 w-4" />
+                        <span>{link.label}</span>
+                      </dt>
+                      <dd className="body-copy mt-1 text-sm font-medium leading-6">
+                        {link.text}
+                      </dd>
+                    </div>
+                  );
+                })}
               </dl>
             </ProjectDetail>
           </div>
         </article>
-        </div>
-      </section>
-    </RevealOnScroll>
+      </div>
+    </section>
   );
 }

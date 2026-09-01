@@ -1,24 +1,36 @@
-import RevealOnScroll from "@/components/reveal-on-scroll";
+import {
+  CloudIcon,
+  CodeIcon,
+  DatabaseIcon,
+  MonitorIcon,
+  ServerIcon,
+  ToolsIcon,
+} from "@/components/icons";
 
 const skillCategories = [
   {
     title: "Programming Languages",
+    icon: CodeIcon,
     skills: ["Java", "JavaScript", "Dart", "Python", "SQL"],
   },
   {
     title: "Frontend & Mobile",
+    icon: MonitorIcon,
     skills: ["HTML", "CSS", "JavaScript", "Bootstrap", "Flutter"],
   },
   {
     title: "Backend Development",
+    icon: ServerIcon,
     skills: ["Node.js", "Express.js", "Spring Boot"],
   },
   {
     title: "Databases",
+    icon: DatabaseIcon,
     skills: ["MySQL", "Microsoft SQL Server"],
   },
   {
     title: "Cloud & DevOps",
+    icon: CloudIcon,
     skills: [
       "Microsoft Azure",
       "Git",
@@ -29,6 +41,7 @@ const skillCategories = [
   },
   {
     title: "Development & Design Tools",
+    icon: ToolsIcon,
     skills: [
       "IntelliJ IDEA",
       "Visual Studio Code",
@@ -87,21 +100,28 @@ function SkillBadge({ skill }: { skill: string }) {
 
 function SkillCategoryCard({
   title,
+  icon: Icon,
   skills,
   staggerIndex,
 }: {
   title: string;
+  icon: typeof CodeIcon;
   skills: readonly string[];
   staggerIndex: number;
 }) {
   return (
     <article
-      className={`surface-card card-hover tag-card group min-w-0 rounded-lg stagger-item stagger-delay-${Math.min(
+      className={`surface-card card-hover tag-card group min-w-0 rounded-2xl stagger-item stagger-delay-${Math.min(
         staggerIndex + 2,
         6,
       )}`}
     >
-      <h3 className="card-title text-base font-bold">{title}</h3>
+      <div className="flex items-center gap-3">
+        <span className="icon-bubble">
+          <Icon className="h-5 w-5" />
+        </span>
+        <h3 className="card-title text-base font-bold">{title}</h3>
+      </div>
       <ul className="tag-list mt-6">
         {skills.map((skill) => (
           <li key={skill} className="min-w-0 max-w-full">
@@ -121,10 +141,9 @@ function LevelGroup({
   skills: readonly string[];
 }) {
   return (
-    <div className="subtle-panel card-hover min-w-0 rounded-lg p-5">
-      <h3 className="accent-text text-sm font-bold uppercase tracking-[0.16em]">
-        {title}
-      </h3>
+    <div className="subtle-panel confidence-card card-hover min-w-0 rounded-2xl p-5">
+      <div className="confidence-line" aria-hidden="true" />
+      <h3 className="accent-text text-sm font-bold uppercase">{title}</h3>
       <ul className="tag-list mt-6">
         {skills.map((skill) => (
           <li key={skill} className="min-w-0 max-w-full">
@@ -140,17 +159,11 @@ function LevelGroup({
 
 export default function SkillsSection() {
   return (
-    <RevealOnScroll delay={120} variant="fade-up">
-      <section
-        id="skills"
-        aria-labelledby="skills-title"
-        className="section-shell page-panel relative px-5 py-20 sm:px-8 lg:py-28"
-      >
-        <div
-          aria-hidden="true"
-          className="section-divider pointer-events-none absolute inset-x-0 top-0 h-px"
-        />
-
+    <section
+      id="skills"
+      aria-labelledby="skills-title"
+      className="section-shell skills-panel page-panel relative px-5 py-10 sm:px-8"
+    >
       <div className="relative mx-auto w-full max-w-6xl">
         <div className="stagger-item stagger-delay-1 max-w-3xl">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
@@ -170,11 +183,12 @@ export default function SkillsSection() {
           </p>
         </div>
 
-        <div className="mt-12 grid min-w-0 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {skillCategories.map((category, index) => (
             <SkillCategoryCard
               key={category.title}
               title={category.title}
+              icon={category.icon}
               skills={category.skills}
               staggerIndex={index}
             />
@@ -183,11 +197,11 @@ export default function SkillsSection() {
 
         <aside
           aria-labelledby="skill-level-title"
-          className="stagger-item stagger-delay-6 soft-card mt-10 rounded-lg p-6"
+          className="stagger-item stagger-delay-6 soft-card confidence-shell mt-7 rounded-2xl p-5 sm:p-6"
         >
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="accent-text text-sm font-bold uppercase tracking-[0.16em]">
+              <p className="accent-text text-sm font-bold uppercase">
                 Current Skill Level
               </p>
               <h2
@@ -199,7 +213,7 @@ export default function SkillsSection() {
             </div>
           </div>
 
-          <div className="mt-6 grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-3">
+          <div className="mt-5 grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-3">
             {skillLevels.map((level) => (
               <LevelGroup
                 key={level.title}
@@ -209,8 +223,7 @@ export default function SkillsSection() {
             ))}
           </div>
         </aside>
-        </div>
-      </section>
-    </RevealOnScroll>
+      </div>
+    </section>
   );
 }
