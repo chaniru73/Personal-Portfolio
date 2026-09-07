@@ -12,7 +12,7 @@ const educationDetails = [
   },
   {
     label: "Current level",
-    value: "Year 3",
+    value: "Third-year undergraduate",
   },
   {
     label: "Status",
@@ -37,11 +37,12 @@ export default function EducationSection() {
   return (
     <section
       id="education"
+      tabIndex={-1}
       aria-labelledby="education-title"
       className="section-shell education-panel section-frame page-panel relative px-5 py-8 sm:px-8"
     >
-      <div className="relative mx-auto grid w-full max-w-6xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-        <RevealOnScroll variant="fade-left">
+      <div className="content-container relative mx-auto grid w-full gap-8">
+        <RevealOnScroll variant="fade-left" className="max-w-3xl">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             Education
           </p>
@@ -60,15 +61,11 @@ export default function EducationSection() {
           </p>
         </RevealOnScroll>
 
-        <RevealOnScroll
-          as="article"
-          variant="fade-right"
-          delay={120}
-          className="surface-card card-hover education-card min-w-0 rounded-2xl p-5 sm:p-6"
+        <article
+          className="surface-card education-card grid min-w-0 gap-6 p-5 sm:p-7 lg:grid-cols-2"
         >
-          <div className="timeline-node" aria-hidden="true" />
-          <div className="flex min-w-0 flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
+          <div className="flex min-w-0 flex-wrap items-center justify-between gap-3 lg:col-span-2">
+            <div className="flex min-w-0 items-start gap-3">
               <span className="icon-bubble">
                 <EducationIcon className="h-5 w-5" />
               </span>
@@ -81,25 +78,25 @@ export default function EducationSection() {
             </span>
           </div>
 
-          <dl className="mt-6 grid min-w-0 gap-3 sm:grid-cols-2">
+          <dl className="education-details grid min-w-0 gap-4 sm:grid-cols-2 lg:row-span-2">
             {educationDetails.map((detail, index) => (
               <RevealOnScroll
                 as="div"
                 key={detail.label}
                 delay={240 + index * 70}
-                className="soft-card min-w-0 rounded-xl px-4 py-3"
+                className="detail-row min-w-0"
               >
                 <dt className="accent-text text-xs font-bold uppercase">
                   {detail.label}
                 </dt>
-                <dd className="card-title mt-1 break-words text-sm font-semibold leading-6">
+                <dd className="card-title mt-2 break-words text-base font-semibold leading-7">
                   {detail.value}
                 </dd>
               </RevealOnScroll>
             ))}
           </dl>
 
-          <RevealOnScroll delay={620} className="mt-7">
+          <RevealOnScroll delay={160}>
             <div className="flex items-center gap-3">
               <span className="icon-bubble icon-bubble-sm">
                 <BookIcon className="h-4.5 w-4.5" />
@@ -108,7 +105,7 @@ export default function EducationSection() {
                 Relevant study areas
               </h4>
             </div>
-            <ul className="tag-list mt-6">
+            <ul className="tag-list mt-4">
               {studyAreas.map((area) => (
                 <li key={area} className="min-w-0 max-w-full">
                   <span className="skill-badge text-sm font-semibold">
@@ -122,18 +119,18 @@ export default function EducationSection() {
           <RevealOnScroll
             as="p"
             delay={700}
-            className="soft-card mt-7 rounded-xl px-4 py-3 text-sm font-medium leading-7 text-[var(--color-heading)] sm:text-base"
+            className="supporting-note text-base leading-7"
           >
             <StrengthIcon className="mr-2 inline h-4.5 w-4.5 align-[-0.15em] text-[var(--color-accent)]" />
             I&apos;m developing practical experience through university projects and
             technical coursework while strengthening my software engineering,
-            backend, Cloud, and DevOps knowledge.
+            backend, cloud, and DevOps knowledge.
           </RevealOnScroll>
-          <RevealOnScroll as="p" delay={780} className="body-copy mt-4 text-sm leading-6">
+          <RevealOnScroll as="p" delay={200} className="body-copy text-base leading-7 lg:col-span-2">
             Additional certifications are not currently listed in this
             portfolio.
           </RevealOnScroll>
-        </RevealOnScroll>
+        </article>
       </div>
     </section>
   );

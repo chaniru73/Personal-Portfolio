@@ -114,7 +114,7 @@ function SkillCategoryCard({
     <RevealOnScroll
       as="article"
       delay={140 + staggerIndex * 80}
-      className="surface-card card-hover tag-card group min-w-0 rounded-2xl"
+      className="surface-card tag-card min-w-0"
     >
       <div className="flex items-center gap-3">
         <span className="icon-bubble">
@@ -145,14 +145,13 @@ function LevelGroup({
   return (
     <RevealOnScroll
       delay={delay}
-      className="subtle-panel confidence-card card-hover min-w-0 rounded-2xl p-5"
+      className="confidence-group min-w-0"
     >
-      <div className="confidence-line" aria-hidden="true" />
-      <h3 className="accent-text text-sm font-bold uppercase">{title}</h3>
+      <h4 className="card-title text-base font-bold">{title}</h4>
       <ul className="tag-list mt-4">
         {skills.map((skill) => (
           <li key={skill} className="min-w-0 max-w-full">
-            <span className="meta-badge text-sm font-medium">
+            <span className="skill-badge text-sm font-medium">
               {skill}
             </span>
           </li>
@@ -166,10 +165,11 @@ export default function SkillsSection() {
   return (
     <section
       id="skills"
+      tabIndex={-1}
       aria-labelledby="skills-title"
       className="section-shell skills-panel section-frame page-panel relative px-5 py-8 sm:px-8"
     >
-      <div className="relative mx-auto w-full max-w-6xl">
+      <div className="content-container relative mx-auto w-full">
         <RevealOnScroll className="max-w-3xl">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             Skills &amp; Tools
@@ -188,7 +188,7 @@ export default function SkillsSection() {
           </p>
         </RevealOnScroll>
 
-        <div className="mt-5 grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="section-content-grid mt-8 grid min-w-0 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {skillCategories.map((category, index) => (
             <SkillCategoryCard
               key={category.title}
@@ -200,27 +200,25 @@ export default function SkillsSection() {
           ))}
         </div>
 
-        <RevealOnScroll
-          as="aside"
+        <aside
           aria-labelledby="skill-level-title"
-          delay={680}
-          className="soft-card confidence-shell mt-5 rounded-2xl p-5 sm:p-6"
+          className="confidence-shell"
         >
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="accent-text text-sm font-bold uppercase">
                 Current Skill Level
               </p>
-              <h2
+              <h3
                 id="skill-level-title"
-                className="section-title mt-3 text-2xl font-bold tracking-normal sm:text-3xl"
+                className="card-title mt-3 text-2xl font-bold tracking-normal"
               >
                 Practical familiarity by focus area.
-              </h2>
+              </h3>
             </div>
           </div>
 
-          <div className="mt-4 grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-3">
+          <div className="confidence-grid mt-6 grid min-w-0 gap-6">
             {skillLevels.map((level, index) => (
               <LevelGroup
                 key={level.title}
@@ -230,7 +228,7 @@ export default function SkillsSection() {
               />
             ))}
           </div>
-        </RevealOnScroll>
+        </aside>
       </div>
     </section>
   );

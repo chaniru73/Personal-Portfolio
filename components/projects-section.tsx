@@ -40,7 +40,7 @@ const project = {
   links: [
     {
       label: "Repository",
-      text: "Repository link will be added soon.",
+      text: "Repository link is not currently listed.",
     },
     {
       label: "Live demo",
@@ -71,6 +71,7 @@ function ProjectDetail({
   return (
     <RevealOnScroll
       as="section"
+      className="project-detail min-w-0"
       delay={delay}
       aria-labelledby={`${title.toLowerCase().replaceAll(" ", "-")}-title`}
     >
@@ -87,7 +88,7 @@ function ProjectDetail({
           {title}
         </h4>
       </div>
-      <div className="body-copy mt-3 text-sm leading-7 sm:text-base">
+      <div className="body-copy mt-3 text-base leading-7">
         {children}
       </div>
     </RevealOnScroll>
@@ -98,10 +99,11 @@ export default function ProjectsSection() {
   return (
     <section
       id="projects"
+      tabIndex={-1}
       aria-labelledby="projects-title"
       className="section-shell projects-panel section-frame page-panel relative px-5 py-8 sm:px-8"
     >
-      <div className="relative mx-auto w-full max-w-6xl">
+      <div className="content-container relative mx-auto w-full">
         <RevealOnScroll className="max-w-3xl">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             Projects
@@ -115,16 +117,13 @@ export default function ProjectsSection() {
           </h2>
 
           <p className="body-copy mt-6 max-w-2xl text-base leading-8 sm:text-lg">
-            A selection of university and personal projects where I have applied
-            software development concepts to practical problems.
+            A university group project where I applied software development
+            concepts to practical problems.
           </p>
         </RevealOnScroll>
 
-        <RevealOnScroll
-          as="article"
-          variant="scale-in"
-          delay={120}
-          className="surface-card card-hover project-card group mt-5 grid min-w-0 gap-6 rounded-2xl p-5 sm:p-6 lg:grid-cols-[0.9fr_1.1fr]"
+        <article
+          className="project-card mt-8 grid min-w-0 gap-8 xl:grid-cols-[0.85fr_1.15fr]"
         >
           <RevealOnScroll variant="fade-left" delay={220} className="min-w-0">
             <div className="flex min-w-0 flex-wrap items-center gap-2.5">
@@ -176,7 +175,7 @@ export default function ProjectsSection() {
             </div>
           </RevealOnScroll>
 
-          <div className="grid min-w-0 gap-6 lg:grid-cols-2">
+          <div className="project-details grid min-w-0 gap-6">
             <ProjectDetail title="Problem" icon={LayersIcon} delay={300}>
               <p>{project.problem}</p>
             </ProjectDetail>
@@ -204,7 +203,7 @@ export default function ProjectsSection() {
             </ProjectDetail>
 
             <ProjectDetail title="Technologies" icon={LayersIcon} delay={540}>
-              <ul className="tag-list mt-5">
+              <ul className="tag-list">
                 {project.technologies.map((technology) => (
                   <li key={technology} className="min-w-0 max-w-full">
                     <TechnologyTag technology={technology} />
@@ -214,7 +213,7 @@ export default function ProjectsSection() {
             </ProjectDetail>
 
             <ProjectDetail title="Links" delay={620}>
-              <dl className="grid gap-4">
+              <dl className="project-link-status grid gap-4 sm:grid-cols-2">
                 {project.links.map((link) => {
                   const Icon =
                     link.label === "Repository" ? GitBranchIcon : ExternalIcon;
@@ -222,13 +221,13 @@ export default function ProjectsSection() {
                   return (
                     <div
                       key={link.label}
-                      className="soft-card rounded-xl px-4 py-3"
+                      className="detail-row"
                     >
                       <dt className="accent-text flex items-center gap-2 text-xs font-bold uppercase">
                         <Icon className="h-4 w-4" />
                         <span>{link.label}</span>
                       </dt>
-                      <dd className="body-copy mt-1 text-sm font-medium leading-6">
+                      <dd className="body-copy mt-1 text-base font-medium leading-7">
                         {link.text}
                       </dd>
                     </div>
@@ -237,7 +236,7 @@ export default function ProjectsSection() {
               </dl>
             </ProjectDetail>
           </div>
-        </RevealOnScroll>
+        </article>
       </div>
     </section>
   );

@@ -23,92 +23,156 @@ const navLinks = [
 
 const sectionIds = navLinks.map((link) => link.href.slice(1));
 
-function getHashHref(): SectionHref {
-  const hash = window.location.hash as SectionHref;
-  return navLinks.some((link) => link.href === hash) ? hash : "#home";
+function isSectionHref(hash: string): hash is SectionHref {
+  return navLinks.some((link) => link.href === hash);
 }
 
 export default function SiteNavigation() {
   const [activeHref, setActiveHref] = useState<SectionHref>("#home");
   const mobileMenuRef = useRef<HTMLDetailsElement>(null);
-
   useEffect(() => {
+    const header = document.querySelector<HTMLElement>(".site-header");
+    const sections = sectionIds.flatMap((id) => {
+      const section = document.getElementById(id);
+      return section ? [section] : [];
+    });
+    let observer: IntersectionObserver | undefined;
+    let pending: { href: SectionHref; started: number } | null = null;
+    let settleTimer = 0;
+    const headerBottom = () => header?.getBoundingClientRect().bottom ?? 0;
+
+    const syncVisibleSection = () => {
+      if (pending) return;
+      const line = headerBottom() + 24;
+      let href: SectionHref = "#home";
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= line) {
+          href = `#${section.id}` as SectionHref;
+        }
+      }
+      if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) {
+        href = "#contact";
+      }
+      setActiveHref(href);
+      const hash = window.location.hash;
+      if ((!hash || isSectionHref(hash)) && hash !== href) {
+        window.history.replaceState(window.history.state, "", href);
+      }
+    };
+
+    const settleNavigation = () => {
+      window.clearTimeout(settleTimer);
+      if (pending) {
+        const target = document.getElementById(pending.href.slice(1));
+        const remaining = Math.abs((target?.getBoundingClientRect().top ?? 0) - headerBottom());
+        const atBottom = pending.href === "#contact" && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+        // Allow native smooth scrolling to finish, but never retain an abandoned target.
+        if (remaining > 2 && !atBottom && performance.now() - pending.started < 1800) {
+          settleTimer = window.setTimeout(settleNavigation, 180);
+          return;
+        }
+      }
+      pending = null;
+      syncVisibleSection();
+    };
+
+    const scheduleSettle = () => {
+      window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(settleNavigation, 180);
+    };
+    const beginNavigation = (href: SectionHref) => {
+      pending = { href, started: performance.now() };
+      setActiveHref(href);
+      scheduleSettle();
+    };
     const updateFromHash = () => {
-      setActiveHref(getHashHref());
+      if (isSectionHref(window.location.hash)) beginNavigation(window.location.hash);
+      else {
+        pending = null;
+        scheduleSettle();
+      }
+    };
+    const closeMenu = (restoreFocus = false) => {
+      const menu = mobileMenuRef.current;
+      if (!menu?.open) return;
+      menu.open = false;
+      if (restoreFocus) {
+        const control = window.matchMedia("(min-width: 768px)").matches
+          ? header?.querySelector<HTMLElement>(".brand-mark")
+          : menu.querySelector<HTMLElement>("summary");
+        control?.focus({ preventScroll: true });
+      }
+    };
+    const onClick = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
+      if (!link || link.target === "_blank" || link.hasAttribute("download")) return;
+      const url = new URL(link.href, window.location.href);
+      if (url.origin !== window.location.origin || url.pathname !== window.location.pathname || url.search !== window.location.search || !isSectionHref(url.hash)) return;
+      beginNavigation(url.hash);
+      closeMenu(mobileMenuRef.current?.contains(document.activeElement));
+      // Native anchors own scrolling and intentional history entries, including repeat clicks.
+    };
+    const interruptNavigation = () => {
+      pending = null;
+      scheduleSettle();
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      interruptNavigation();
+      if (event.target instanceof Node && !mobileMenuRef.current?.contains(event.target)) {
+        closeMenu(mobileMenuRef.current?.contains(document.activeElement));
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeMenu(true);
+      if (["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " ", "Tab"].includes(event.key)) interruptNavigation();
+    };
+    const createObserver = () => {
+      observer?.disconnect();
+      const top = Math.min(headerBottom(), Math.max(0, window.innerHeight - 1));
+      const band = Math.min(96, window.innerHeight - top);
+      const bottom = Math.max(0, window.innerHeight - top - band);
+      observer = new IntersectionObserver(syncVisibleSection, {
+        rootMargin: `-${top}px 0px -${bottom}px 0px`,
+        threshold: 0,
+      });
+      sections.forEach((section) => observer?.observe(section));
+      if (window.matchMedia("(min-width: 768px)").matches) {
+        closeMenu(mobileMenuRef.current?.contains(document.activeElement));
+      }
+      scheduleSettle();
     };
 
     updateFromHash();
-
-    const observers: IntersectionObserver[] = [];
-    const intersectionRatios = new Map<string, number>();
-
-    const createObserver = () => {
-      observers.forEach((observer) => observer.disconnect());
-      observers.length = 0;
-      intersectionRatios.clear();
-
-      const headerHeight = Number.parseFloat(
-        getComputedStyle(document.documentElement).getPropertyValue(
-          "--header-height",
-        ),
-      );
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            intersectionRatios.set(
-              entry.target.id,
-              entry.isIntersecting ? entry.intersectionRatio : 0,
-            );
-          });
-
-          let nextId = "home";
-          let strongestRatio = 0;
-
-          sectionIds.forEach((id) => {
-            const ratio = intersectionRatios.get(id) ?? 0;
-
-            if (ratio > strongestRatio) {
-              strongestRatio = ratio;
-              nextId = id;
-            }
-          });
-
-          if (strongestRatio > 0) {
-            setActiveHref(`#${nextId}` as SectionHref);
-          }
-        },
-        {
-          rootMargin: `-${headerHeight + 24}px 0px -42% 0px`,
-          threshold: [0, 0.12, 0.28, 0.5, 0.72],
-        },
-      );
-
-      sectionIds.forEach((id) => {
-        const section = document.getElementById(id);
-
-        if (section) {
-          observer.observe(section);
-        }
-      });
-
-      observers.push(observer);
-    };
-
     createObserver();
+    const resizeObserver = new ResizeObserver(createObserver);
+    if (header) resizeObserver.observe(header);
+    document.addEventListener("click", onClick);
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown, { passive: true });
+    window.addEventListener("wheel", interruptNavigation, { passive: true });
+    window.addEventListener("touchstart", interruptNavigation, { passive: true });
+    window.addEventListener("scroll", scheduleSettle, { passive: true });
+    window.addEventListener("scrollend", settleNavigation);
     window.addEventListener("hashchange", updateFromHash);
+    window.addEventListener("popstate", updateFromHash);
     window.addEventListener("resize", createObserver);
-
     return () => {
-      observers.forEach((observer) => observer.disconnect());
+      observer?.disconnect();
+      resizeObserver.disconnect();
+      window.clearTimeout(settleTimer);
+      document.removeEventListener("click", onClick);
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("wheel", interruptNavigation);
+      window.removeEventListener("touchstart", interruptNavigation);
+      window.removeEventListener("scroll", scheduleSettle);
+      window.removeEventListener("scrollend", settleNavigation);
       window.removeEventListener("hashchange", updateFromHash);
+      window.removeEventListener("popstate", updateFromHash);
       window.removeEventListener("resize", createObserver);
     };
   }, []);
-
-  const closeMobileMenu = () => {
-    mobileMenuRef.current?.removeAttribute("open");
-  };
 
   const renderLink = (
     link: (typeof navLinks)[number],
@@ -121,11 +185,6 @@ export default function SiteNavigation() {
         href={link.href}
         aria-label={link.label}
         aria-current={isActive ? "location" : undefined}
-        onClick={() => {
-          if (mode === "mobile") {
-            closeMobileMenu();
-          }
-        }}
         className={`nav-link focus-ring rounded-lg px-3 py-2 transition ${
           mode === "mobile" ? "block" : ""
         } ${isActive ? "is-active" : ""}`}
@@ -138,14 +197,11 @@ export default function SiteNavigation() {
   return (
     <nav
       aria-label="Primary navigation"
-      className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5 sm:px-8"
+      className="content-container mx-auto flex w-full items-center justify-between px-5 sm:px-8"
     >
       <a
         href="#home"
         aria-label="CW home"
-        onClick={() => {
-          closeMobileMenu();
-        }}
         className="brand-mark focus-ring flex h-11 w-11 items-center justify-center rounded-xl text-sm font-bold tracking-wide transition"
       >
         <span>C</span>
@@ -154,7 +210,7 @@ export default function SiteNavigation() {
 
       <details ref={mobileMenuRef} className="relative md:hidden">
         <summary
-          aria-label="Open navigation menu"
+          aria-label="Navigation menu"
           className="mobile-menu-button focus-ring flex min-h-11 cursor-pointer list-none items-center justify-center rounded-xl px-3 py-2 transition"
         >
           <MenuIcon className="h-5 w-5" />

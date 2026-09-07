@@ -40,15 +40,16 @@ export default function RevealOnScroll({
       "(prefers-reduced-motion: reduce)",
     );
 
-    if (prefersReducedMotion.matches) {
+    if (prefersReducedMotion.matches || !("IntersectionObserver" in window)) {
       element.classList.add("is-visible");
       return;
     }
 
     const rect = element.getBoundingClientRect();
 
-    if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
       element.classList.add("is-visible");
+      return;
     }
 
     const readyFrame = window.requestAnimationFrame(() => {
@@ -63,22 +64,33 @@ export default function RevealOnScroll({
         }
       },
       {
-        rootMargin: "0px 0px -14% 0px",
-        threshold: 0.12,
+        rootMargin: "0px",
+        threshold: 0,
       },
     );
 
     observer.observe(element);
 
+    const showImmediately = () => {
+      if (prefersReducedMotion.matches || element.contains(document.activeElement)) {
+        element.classList.add("is-visible");
+        observer.disconnect();
+      }
+    };
+    prefersReducedMotion.addEventListener("change", showImmediately);
+    element.addEventListener("focusin", showImmediately);
+
     return () => {
       window.cancelAnimationFrame(readyFrame);
       observer.disconnect();
+      prefersReducedMotion.removeEventListener("change", showImmediately);
+      element.removeEventListener("focusin", showImmediately);
     };
   }, []);
 
   const revealStyle = {
     ...style,
-    "--reveal-delay": `${delay}ms`,
+    "--reveal-delay": `${Math.min(Math.max(delay, 0) * 0.4, 320)}ms`,
   } as CSSProperties;
 
   return (

@@ -37,31 +37,50 @@ function DetailList({
   items,
   icon: Icon,
   delay,
+  variant = "tags",
 }: {
   title: string;
   items: readonly string[];
   icon: typeof EducationIcon;
   delay: number;
+  variant?: "rows" | "tags";
 }) {
   return (
-    <RevealOnScroll delay={delay} className="info-group">
-      <div className="flex items-center gap-3">
+    <RevealOnScroll
+      as="article"
+      delay={delay}
+      className="about-info-card surface-card rounded-2xl p-6 sm:p-7"
+    >
+      <div className="about-card-heading flex items-center gap-3">
         <span className="icon-bubble">
           <Icon className="h-5 w-5" />
         </span>
-        <h3 className="accent-text text-sm font-bold uppercase">{title}</h3>
+        <h3 className="card-title text-lg font-bold tracking-normal">
+          {title}
+        </h3>
       </div>
-      <ul className="body-copy mt-4 grid gap-3 text-sm leading-6 sm:text-[15px]">
-        {items.map((item) => (
-          <li key={item} className="flex gap-3">
-            <span
-              aria-hidden="true"
-              className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent)]"
-            />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
+
+      {variant === "rows" ? (
+        <ul className="about-info-rows body-copy mt-6 grid gap-4 text-base leading-7">
+          {items.map((item) => (
+            <li key={item} className="flex gap-3">
+              <span
+                aria-hidden="true"
+                className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent)]"
+              />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <ul className="about-tag-list mt-6 flex flex-wrap gap-3">
+          {items.map((item) => (
+            <li key={item} className="skill-badge">
+              {item}
+            </li>
+          ))}
+        </ul>
+      )}
     </RevealOnScroll>
   );
 }
@@ -70,80 +89,80 @@ export default function AboutSection() {
   return (
     <section
       id="about"
+      tabIndex={-1}
       aria-labelledby="about-title"
       className="section-shell about-panel section-frame page-panel relative px-5 py-8 sm:px-8"
     >
-      <div className="relative mx-auto grid w-full max-w-6xl gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-        <RevealOnScroll variant="fade-left">
-          <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
+      <div className="about-layout content-container relative mx-auto flex w-full flex-col items-center">
+        <div className="about-main mx-auto w-full max-w-[1020px]">
+          <RevealOnScroll
+            as="p"
+            delay={40}
+            className="about-badge eyebrow mx-auto inline-flex rounded-full px-4 py-2 text-sm font-medium"
+          >
             About Me
-          </p>
+          </RevealOnScroll>
 
-          <h2
+          <RevealOnScroll
+            as="h2"
             id="about-title"
-            className="section-title max-w-3xl text-3xl font-bold tracking-normal sm:text-4xl lg:text-5xl"
+            delay={120}
+            className="about-title section-title mx-auto max-w-4xl text-center text-3xl font-bold tracking-normal sm:text-4xl lg:text-5xl"
           >
             Building software with a focus on reliable delivery.
-          </h2>
+          </RevealOnScroll>
 
-          <div className="body-copy mt-6 space-y-4 text-base leading-8 sm:text-lg">
-            <p>
+          <div className="about-paragraphs body-copy mx-auto text-base leading-8 sm:text-lg">
+            <RevealOnScroll as="p" delay={220}>
               I&apos;m a third-year BSc (Hons) Software Engineering undergraduate
               at NSBM Green University. I chose this field because I enjoy
               solving problems and turning ideas into useful applications.
-            </p>
-            <p>
+            </RevealOnScroll>
+            <RevealOnScroll as="p" delay={300}>
               I&apos;m currently developing my skills in Java, Spring Boot,
               Node.js, SQL, Git and GitHub, Docker, cloud technologies, DevOps,
               software architecture, and web development. Cloud and DevOps
               interest me because they help teams build, deploy, scale, and
               maintain software more efficiently through automation and reliable
               delivery practices.
-            </p>
-            <p>
+            </RevealOnScroll>
+            <RevealOnScroll as="p" delay={380}>
               I value continuous learning, teamwork, adaptability, and taking
               responsibility for my work. My goal is to become a skilled
-              Software Engineer with strong development, Cloud, and DevOps
+              Software Engineer with strong development, cloud, and DevOps
               knowledge, supported by real-world industry experience.
+            </RevealOnScroll>
+          </div>
+
+          <RevealOnScroll delay={480}>
+            <p className="about-opportunity soft-card mx-auto rounded-2xl px-5 py-4 text-center text-sm font-semibold leading-7 text-[var(--color-heading)] sm:text-base">
+              I&apos;m open to Software Engineering, Backend Development, Cloud,
+              and DevOps internships or entry-level opportunities.
             </p>
-          </div>
-        </RevealOnScroll>
+          </RevealOnScroll>
+        </div>
 
-        <RevealOnScroll
-          as="aside"
-          aria-label="About information"
-          variant="fade-right"
-          delay={120}
-          className="surface-card elevated-info-card rounded-2xl p-5 sm:p-6"
-        >
-          <div className="grid gap-6">
-            <DetailList
-              title="Education"
-              items={education}
-              icon={EducationIcon}
-              delay={220}
-            />
-            <DetailList
-              title="Currently learning"
-              items={currentlyLearning}
-              icon={BookIcon}
-              delay={300}
-            />
-            <DetailList
-              title="Core strengths"
-              items={coreStrengths}
-              icon={StrengthIcon}
-              delay={380}
-            />
-          </div>
-        </RevealOnScroll>
-
-        <RevealOnScroll delay={460} className="lg:col-span-2">
-          <p className="soft-card rounded-2xl px-5 py-4 text-sm font-semibold leading-7 text-[var(--color-heading)] sm:text-base">
-            I&apos;m open to Software Engineering, Backend Development, Cloud,
-            and DevOps internships or entry-level opportunities.
-          </p>
-        </RevealOnScroll>
+        <div className="about-card-grid grid w-full">
+          <DetailList
+            title="Education"
+            items={education}
+            icon={EducationIcon}
+            delay={580}
+            variant="rows"
+          />
+          <DetailList
+            title="Currently Learning"
+            items={currentlyLearning}
+            icon={BookIcon}
+            delay={670}
+          />
+          <DetailList
+            title="Core Strengths"
+            items={coreStrengths}
+            icon={StrengthIcon}
+            delay={760}
+          />
+        </div>
       </div>
     </section>
   );

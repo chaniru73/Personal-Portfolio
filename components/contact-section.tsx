@@ -42,10 +42,11 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
+      tabIndex={-1}
       aria-labelledby="contact-title"
       className="section-shell contact-panel section-frame page-panel relative px-5 py-8 sm:px-8"
     >
-      <div className="relative mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+      <div className="content-container relative mx-auto grid w-full gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <RevealOnScroll variant="fade-left">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             Contact
@@ -75,11 +76,8 @@ export default function ContactSection() {
           </div>
         </RevealOnScroll>
 
-        <RevealOnScroll
-          as="aside"
+        <aside
           aria-label="Contact information"
-          variant="fade-right"
-          delay={120}
           className="surface-card contact-card min-w-0 rounded-2xl p-5 sm:p-6"
         >
           <dl className="grid min-w-0 gap-3">
@@ -91,14 +89,18 @@ export default function ContactSection() {
                   as="div"
                   key={detail.label}
                   delay={220 + index * 80}
-                  className="soft-card min-w-0 rounded-xl px-4 py-3"
+                  className="detail-row min-w-0"
                 >
                   <dt className="accent-text flex items-center gap-2 text-xs font-bold uppercase">
                     <Icon className="h-4 w-4" />
                     <span>{detail.label}</span>
                   </dt>
-                  <dd className="card-title mt-1 break-words text-sm font-semibold leading-6">
-                    {detail.value}
+                  <dd className="card-title mt-2 break-words text-base font-semibold leading-7">
+                    {detail.label === "Email" ? (
+                      <a href={`mailto:${detail.value}`} className="email-link focus-ring">
+                        {detail.value}
+                      </a>
+                    ) : detail.value}
                   </dd>
                 </RevealOnScroll>
               );
@@ -125,7 +127,7 @@ export default function ContactSection() {
               );
             })}
           </RevealOnScroll>
-        </RevealOnScroll>
+        </aside>
       </div>
     </section>
   );

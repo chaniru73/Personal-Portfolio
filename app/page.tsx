@@ -9,12 +9,13 @@ import SkillsSection from "@/components/skills-section";
 
 export default function Home() {
   return (
-    <div className="page-shell relative min-h-screen overflow-x-clip">
+    <div className="page-shell relative min-h-screen">
+      <a href="#main-content" className="skip-link focus-ring">Skip to content</a>
       <header className="site-header fixed inset-x-0 top-0 z-[100]">
         <SiteNavigation />
       </header>
 
-      <main className="main-stack relative z-10">
+      <main id="main-content" tabIndex={-1} className="main-stack relative z-10">
         <HomeSection />
         <AboutSection />
         <SkillsSection />

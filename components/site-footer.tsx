@@ -1,5 +1,4 @@
-import { GithubLogo, LinkedinLogo } from "@/components/icons";
-import RevealOnScroll from "@/components/reveal-on-scroll";
+import { DeployIcon, GithubLogo, LinkedinLogo } from "@/components/icons";
 
 const footerLinks = [
   {
@@ -18,12 +17,10 @@ export default function SiteFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <RevealOnScroll
-      as="footer"
-      delay={80}
+    <footer
       className="footer-shell relative z-10 px-5 py-5 text-sm sm:px-8"
     >
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 md:flex-row md:items-center md:justify-between">
+      <div className="content-container mx-auto flex w-full flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div className="min-w-0">
           <p className="font-semibold text-white">
             &copy; {currentYear} Chaniru Weerasuriya.
@@ -38,8 +35,9 @@ export default function SiteFooter() {
             <li>
               <a
                 href="#home"
-                className="text-link focus-ring rounded-md transition"
+                className="text-link back-to-top focus-ring rounded-md transition"
               >
+                <DeployIcon className="h-4 w-4" />
                 Back to top
               </a>
             </li>
@@ -65,6 +63,6 @@ export default function SiteFooter() {
           </ul>
         </nav>
       </div>
-    </RevealOnScroll>
+    </footer>
   );
 }
