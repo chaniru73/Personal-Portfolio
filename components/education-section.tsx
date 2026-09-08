@@ -1,5 +1,5 @@
 import { BookIcon, EducationIcon, StrengthIcon } from "@/components/icons";
-import RevealOnScroll from "@/components/reveal-on-scroll";
+import MotionReveal from "@/components/motion-reveal";
 
 const educationDetails = [
   {
@@ -42,7 +42,7 @@ export default function EducationSection() {
       className="section-shell education-panel section-frame page-panel relative px-5 py-8 sm:px-8"
     >
       <div className="content-container relative mx-auto grid w-full gap-8">
-        <RevealOnScroll variant="fade-left" className="max-w-3xl">
+        <MotionReveal variant="fade-left" className="max-w-3xl">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             Education
           </p>
@@ -59,7 +59,7 @@ export default function EducationSection() {
             software development, system design, security, data, and
             user-centred technology.
           </p>
-        </RevealOnScroll>
+        </MotionReveal>
 
         <article
           className="surface-card education-card grid min-w-0 gap-6 p-5 sm:p-7 lg:grid-cols-2"
@@ -80,10 +80,11 @@ export default function EducationSection() {
 
           <dl className="education-details grid min-w-0 gap-4 sm:grid-cols-2 lg:row-span-2">
             {educationDetails.map((detail, index) => (
-              <RevealOnScroll
+              <MotionReveal
                 as="div"
                 key={detail.label}
                 delay={240 + index * 70}
+                hover="card"
                 className="detail-row min-w-0"
               >
                 <dt className="accent-text text-xs font-bold uppercase">
@@ -92,11 +93,11 @@ export default function EducationSection() {
                 <dd className="card-title mt-2 break-words text-base font-semibold leading-7">
                   {detail.value}
                 </dd>
-              </RevealOnScroll>
+              </MotionReveal>
             ))}
           </dl>
 
-          <RevealOnScroll delay={160}>
+          <MotionReveal delay={160}>
             <div className="flex items-center gap-3">
               <span className="icon-bubble icon-bubble-sm">
                 <BookIcon className="h-4.5 w-4.5" />
@@ -114,9 +115,9 @@ export default function EducationSection() {
                 </li>
               ))}
             </ul>
-          </RevealOnScroll>
+          </MotionReveal>
 
-          <RevealOnScroll
+          <MotionReveal
             as="p"
             delay={700}
             className="supporting-note text-base leading-7"
@@ -125,11 +126,11 @@ export default function EducationSection() {
             I&apos;m developing practical experience through university projects and
             technical coursework while strengthening my software engineering,
             backend, cloud, and DevOps knowledge.
-          </RevealOnScroll>
-          <RevealOnScroll as="p" delay={200} className="body-copy text-base leading-7 lg:col-span-2">
+          </MotionReveal>
+          <MotionReveal as="p" delay={200} className="body-copy text-base leading-7 lg:col-span-2">
             Additional certifications are not currently listed in this
             portfolio.
-          </RevealOnScroll>
+          </MotionReveal>
         </article>
       </div>
     </section>

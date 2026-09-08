@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 
 import { MenuIcon } from "@/components/icons";
+import { microTransition } from "@/lib/motion-variants";
 
 type SectionHref =
   | "#home"
@@ -29,6 +31,7 @@ function isSectionHref(hash: string): hash is SectionHref {
 
 export default function SiteNavigation() {
   const [activeHref, setActiveHref] = useState<SectionHref>("#home");
+  const prefersReducedMotion = useReducedMotion();
   const mobileMenuRef = useRef<HTMLDetailsElement>(null);
   useEffect(() => {
     const header = document.querySelector<HTMLElement>(".site-header");
@@ -181,16 +184,19 @@ export default function SiteNavigation() {
     const isActive = activeHref === link.href;
 
     return (
-      <a
+      <motion.a
         href={link.href}
         aria-label={link.label}
         aria-current={isActive ? "location" : undefined}
         className={`nav-link focus-ring rounded-lg px-3 py-2 transition ${
           mode === "mobile" ? "block" : ""
         } ${isActive ? "is-active" : ""}`}
+        whileHover={prefersReducedMotion ? undefined : { y: -1 }}
+        whileTap={prefersReducedMotion ? undefined : { scale: 0.985, y: 0 }}
+        transition={microTransition}
       >
         {link.label}
-      </a>
+      </motion.a>
     );
   };
 
@@ -199,14 +205,17 @@ export default function SiteNavigation() {
       aria-label="Primary navigation"
       className="content-container mx-auto flex w-full items-center justify-between px-5 sm:px-8"
     >
-      <a
+      <motion.a
         href="#home"
         aria-label="CW home"
         className="brand-mark focus-ring flex h-11 w-11 items-center justify-center rounded-xl text-sm font-bold tracking-wide transition"
+        whileHover={prefersReducedMotion ? undefined : { y: -1, scale: 1.02 }}
+        whileTap={prefersReducedMotion ? undefined : { scale: 0.97, y: 0 }}
+        transition={microTransition}
       >
         <span>C</span>
         <span>W</span>
-      </a>
+      </motion.a>
 
       <details ref={mobileMenuRef} className="relative md:hidden">
         <summary
@@ -216,11 +225,17 @@ export default function SiteNavigation() {
           <MenuIcon className="h-5 w-5" />
           <span className="sr-only">Menu</span>
         </summary>
-        <ul className="mobile-menu-panel absolute right-0 top-full z-50 mt-3 grid w-52 max-w-[calc(100vw-2.5rem)] gap-1 rounded-lg p-2 text-sm font-medium backdrop-blur">
+        <motion.ul
+          className="mobile-menu-panel absolute right-0 top-full z-50 mt-3 grid w-52 max-w-[calc(100vw-2.5rem)] gap-1 rounded-lg p-2 text-sm font-medium backdrop-blur"
+          data-lenis-prevent
+          initial={false}
+          animate={{ opacity: 1, y: 0 }}
+          transition={microTransition}
+        >
           {navLinks.map((link) => (
             <li key={link.label}>{renderLink(link, "mobile")}</li>
           ))}
-        </ul>
+        </motion.ul>
       </details>
 
       <ul className="hidden flex-wrap items-center justify-end gap-2 text-sm font-medium md:flex md:gap-3">

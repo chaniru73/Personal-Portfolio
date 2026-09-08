@@ -3,7 +3,7 @@ import {
   EducationIcon,
   StrengthIcon,
 } from "@/components/icons";
-import RevealOnScroll from "@/components/reveal-on-scroll";
+import MotionReveal from "@/components/motion-reveal";
 
 const education = [
   "BSc (Hons) in Software Engineering",
@@ -46,9 +46,10 @@ function DetailList({
   variant?: "rows" | "tags";
 }) {
   return (
-    <RevealOnScroll
+    <MotionReveal
       as="article"
       delay={delay}
+      hover="card"
       className="about-info-card surface-card rounded-2xl p-6 sm:p-7"
     >
       <div className="about-card-heading flex items-center gap-3">
@@ -81,7 +82,7 @@ function DetailList({
           ))}
         </ul>
       )}
-    </RevealOnScroll>
+    </MotionReveal>
   );
 }
 
@@ -95,51 +96,51 @@ export default function AboutSection() {
     >
       <div className="about-layout content-container relative mx-auto flex w-full flex-col items-center">
         <div className="about-main mx-auto w-full max-w-[1020px]">
-          <RevealOnScroll
+          <MotionReveal
             as="p"
             delay={40}
             className="about-badge eyebrow mx-auto inline-flex rounded-full px-4 py-2 text-sm font-medium"
           >
             About Me
-          </RevealOnScroll>
+          </MotionReveal>
 
-          <RevealOnScroll
+          <MotionReveal
             as="h2"
             id="about-title"
             delay={120}
             className="about-title section-title mx-auto max-w-4xl text-center text-3xl font-bold tracking-normal sm:text-4xl lg:text-5xl"
           >
             Building software with a focus on reliable delivery.
-          </RevealOnScroll>
+          </MotionReveal>
 
           <div className="about-paragraphs body-copy mx-auto text-base leading-8 sm:text-lg">
-            <RevealOnScroll as="p" delay={220}>
+            <MotionReveal as="p" delay={220}>
               I&apos;m a third-year BSc (Hons) Software Engineering undergraduate
               at NSBM Green University. I chose this field because I enjoy
               solving problems and turning ideas into useful applications.
-            </RevealOnScroll>
-            <RevealOnScroll as="p" delay={300}>
+            </MotionReveal>
+            <MotionReveal as="p" delay={300}>
               I&apos;m currently developing my skills in Java, Spring Boot,
               Node.js, SQL, Git and GitHub, Docker, cloud technologies, DevOps,
               software architecture, and web development. Cloud and DevOps
               interest me because they help teams build, deploy, scale, and
               maintain software more efficiently through automation and reliable
               delivery practices.
-            </RevealOnScroll>
-            <RevealOnScroll as="p" delay={380}>
+            </MotionReveal>
+            <MotionReveal as="p" delay={380}>
               I value continuous learning, teamwork, adaptability, and taking
               responsibility for my work. My goal is to become a skilled
               Software Engineer with strong development, cloud, and DevOps
               knowledge, supported by real-world industry experience.
-            </RevealOnScroll>
+            </MotionReveal>
           </div>
 
-          <RevealOnScroll delay={480}>
+          <MotionReveal delay={480}>
             <p className="about-opportunity soft-card mx-auto rounded-2xl px-5 py-4 text-center text-sm font-semibold leading-7 text-[var(--color-heading)] sm:text-base">
               I&apos;m open to Software Engineering, Backend Development, Cloud,
               and DevOps internships or entry-level opportunities.
             </p>
-          </RevealOnScroll>
+          </MotionReveal>
         </div>
 
         <div className="about-card-grid grid w-full">

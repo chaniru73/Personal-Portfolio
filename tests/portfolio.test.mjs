@@ -17,6 +17,27 @@ function loadModule(path, globals = {}, imports = {}) {
     exports, URL, ...globals,
     require(name) {
       if (name === "react/jsx-runtime") return { jsx: () => null, jsxs: () => null };
+      if (name.endsWith(".css")) return {};
+      if (name === "motion/react") {
+        return {
+          MotionConfig: ({ children }) => children,
+          motion: new Proxy({}, { get: () => () => null }),
+          useInView: () => globals.__motionInView ?? true,
+          useMotionValue: (initial) => ({ current: initial, set(value) { this.current = value; } }),
+          useReducedMotion: () => false,
+        };
+      }
+      if (name === "@/lib/motion-variants") {
+        return {
+          microTransition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+          motionEase: [0.22, 1, 0.36, 1],
+          revealTransition: { duration: 0.58, ease: [0.22, 1, 0.36, 1] },
+          revealVariants: {},
+        };
+      }
+      if (name === "@/components/animation-provider") {
+        return { __esModule: true, default: ({ children }) => children };
+      }
       if (name === "@/components/icons") return {};
       if (name in imports) return imports[name];
       throw new Error(`Unexpected import: ${name}`);
@@ -193,65 +214,206 @@ test("an abandoned target cannot keep the active section locked indefinitely", (
   h.cleanup();
 });
 
-test("reveal never hides content already inside the initial viewport", () => {
-  const classes = new Set();
-  const element = { getBoundingClientRect: () => ({ top: 830, bottom: 878 }), classList: { add: (value) => classes.add(value) } };
-  const { default: Reveal } = loadModule("components/reveal-on-scroll.tsx", {
-    window: { innerHeight: 870, IntersectionObserver: true, matchMedia: () => ({ matches: false }) },
-  }, { react: { useEffect: (effect) => effect(), useRef: () => ({ current: element }) } });
-  Reveal({ children: null });
-  assert.ok(classes.has("is-visible"));
-  assert.ok(!classes.has("is-reveal-ready"));
+test("Motion reveal replaces the custom IntersectionObserver reveal system", () => {
+  const revealSource = readFileSync(new URL("components/motion-reveal.tsx", root), "utf8");
+  const cssSource = readFileSync(new URL("app/globals.css", root), "utf8");
+  assert.match(revealSource, /from "motion\/react"/);
+  assert.match(revealSource, /useInView/);
+  assert.match(revealSource, /initial=\{false\}/);
+  assert.match(revealSource, /margin: "0px 0px -96px 0px"/);
+  assert.match(revealSource, /maxRevealDelay = 1200/);
+  assert.doesNotMatch(revealSource, /,\s*400\)\s*\/\s*1000/);
+  assert.doesNotMatch(revealSource, /IntersectionObserver/);
+  assert.doesNotMatch(cssSource, /\.reveal-on-scroll/);
+  assert.doesNotMatch(cssSource, /@keyframes hero-enter/);
+  assert.doesNotMatch(cssSource, /scroll-behavior:\s*smooth/);
 });
 
-test("offscreen reveals show once and release observers and listeners", () => {
-  const classes = new Set();
-  const listeners = new Map();
+test("footer participates in the Motion reveal system", () => {
+  const source = readFileSync(new URL("components/site-footer.tsx", root), "utf8");
+  assert.match(source, /MotionReveal/);
+  assert.match(source, /as="footer"/);
+  assert.match(source, /variant="fade-up"/);
+});
+
+test("animation dependencies use the requested current packages only", () => {
+  const manifest = JSON.parse(readFileSync(new URL("package.json", root), "utf8"));
+  const lock = JSON.parse(readFileSync(new URL("package-lock.json", root), "utf8"));
+  for (const name of ["gsap", "@gsap/react", "motion", "lenis"]) {
+    assert.ok(manifest.dependencies[name], `${name} missing from package.json`);
+    assert.ok(lock.packages[`node_modules/${name}`], `${name} missing from lockfile`);
+  }
+  assert.equal(manifest.dependencies["framer-motion"], undefined);
+  assert.equal(lock.packages[""].dependencies["framer-motion"], undefined);
+  assert.equal(lock.packages["node_modules/motion"].dependencies["framer-motion"], "^13.2.0");
+});
+
+test("Home animation keeps GSAP scoped to hero and workflow elements", () => {
+  const source = readFileSync(new URL("components/home-animation.tsx", root), "utf8");
+  const homeSource = readFileSync(new URL("components/home-section.tsx", root), "utf8");
+  assert.match(source, /useGSAP/);
+  assert.match(source, /\.hero-workflow-card/);
+  assert.match(source, /data-home-animation-root/);
+  assert.match(homeSource, /hero-gsap-item/);
+  assert.match(homeSource, /data-home-animation-root/);
+  assert.match(source, /fromTo\(greeting/);
+  assert.match(source, /pointermove/);
+  assert.match(source, /prefers-reduced-motion: reduce/);
+  assert.match(source, /showHomeTargets\(\);/);
+  assert.match(source, /clearProps: clearRevealProps/);
+  assert.doesNotMatch(source, /gsap\.set\(items,\s*\{\s*autoAlpha:\s*0/s);
+  assert.doesNotMatch(source, /\.to\("\.hero-/);
+});
+
+test("Home keeps all required content and links in the server-rendered component", () => {
+  const source = readFileSync(new URL("components/home-section.tsx", root), "utf8");
+  assert.match(source, /Hello, I&apost;m|Hello, I&apos;m/);
+  assert.match(source, /Chaniru/);
+  assert.match(source, /Weerasuriya/);
+  assert.match(source, /Software Engineering Undergraduate \| Aspiring Cloud &amp; DevOps\s+Engineer/);
+  assert.match(source, /I&apos;m a Software Engineering undergraduate at NSBM Green University/);
+  assert.match(source, /Malabe, Sri Lanka/);
+  assert.match(source, /Explore My Work/);
+  assert.match(source, /Contact Me/);
+  assert.match(source, /https:\/\/github\.com\/chaniru73/);
+  assert.match(source, /https:\/\/www\.linkedin\.com\/in\/chaniru-weerasuriya-a89607373/);
+  assert.match(source, /aria-label="GitHub profile opens in a new tab"/);
+  assert.match(source, /aria-label="LinkedIn profile opens in a new tab"/);
+  assert.equal((source.match(/label: "/g) ?? []).length, 4);
+  for (const label of ["Code", "Build", "Deploy", "Monitor"]) {
+    assert.match(source, new RegExp(`label: "${label}"`));
+  }
+});
+
+test("Home content has no permanent CSS hidden state", () => {
+  const css = postcss.parse(readFileSync(new URL("app/globals.css", root), "utf8"));
+  const homeSelectors = [".hero-gsap-item", ".hero-copy", ".hero-greeting", ".hero-name", ".hero-role", ".hero-introduction", ".hero-location", ".hero-actions", ".hero-socials"];
+  css.walkRules((rule) => {
+    if (!homeSelectors.some((selector) => rule.selector.includes(selector))) return;
+    rule.walkDecls((declaration) => {
+      assert.notEqual(`${declaration.prop}:${declaration.value}`, "opacity:0", rule.selector);
+      assert.notEqual(`${declaration.prop}:${declaration.value}`, "visibility:hidden", rule.selector);
+      assert.notEqual(`${declaration.prop}:${declaration.value}`, "display:none", rule.selector);
+    });
+  });
+});
+
+function smoothScrollHarness({
+  reduced = false,
+  coarse = false,
+  hash = "",
+  headerHeight = 96,
+} = {}) {
   let cleanup;
-  let callback;
-  const observers = [];
+  const listeners = new Map();
+  const frames = new Map();
+  const lenisInstances = [];
+  const ticker = { added: undefined, removed: undefined, lagValue: undefined };
+  const triggers = [{ killed: false, kill() { this.killed = true; } }];
+  let frameId = 0;
   const events = {
     addEventListener: (type, fn) => listeners.set(type, fn),
     removeEventListener: (type) => listeners.delete(type),
   };
-  const media = { matches: false, ...events };
-  const document = { activeElement: null };
-  const element = {
-    getBoundingClientRect: () => ({ top: 1800, bottom: 2000 }),
-    classList: { add: (value) => classes.add(value) },
-    contains: (node) => node === element, ...events,
+  class LenisMock {
+    constructor(options) {
+      this.options = options;
+      this.destroyed = false;
+      this.resized = false;
+      this.scrollTargets = [];
+      lenisInstances.push(this);
+    }
+    on(event, callback) {
+      this.event = event;
+      this.callback = callback;
+      return () => { this.unsubscribed = true; };
+    }
+    raf(time) { this.lastRaf = time; }
+    resize() { this.resized = true; }
+    scrollTo(target, options) { this.scrollTargets.push({ target, options }); }
+    destroy() { this.destroyed = true; }
+  }
+  const ScrollTrigger = {
+    refreshed: 0,
+    updated: 0,
+    refresh() { this.refreshed += 1; },
+    update() { this.updated += 1; },
+    getAll() { return triggers; },
   };
-  const { default: Reveal } = loadModule("components/reveal-on-scroll.tsx", {
-    window: {
-      innerHeight: 870, IntersectionObserver: true, matchMedia: () => media,
-      requestAnimationFrame: (fn) => { fn(); return 1; }, cancelAnimationFrame() {},
-    }, document,
-    IntersectionObserver: class {
-      constructor(fn, options) { callback = fn; observers.push(this); assert.equal(options.rootMargin, "0px"); }
-      observe() {}
-      disconnect() { this.disconnected = true; }
+  const gsap = {
+    plugins: [],
+    registerPlugin(plugin) { this.plugins.push(plugin); },
+    ticker: {
+      add(fn) { ticker.added = fn; },
+      remove(fn) { ticker.removed = fn; },
+      lagSmoothing(value) { ticker.lagValue = value; },
     },
-  }, { react: { useEffect: (effect) => { cleanup = effect(); }, useRef: () => ({ current: element }) } });
-  Reveal({ children: null });
-  assert.ok(classes.has("is-reveal-ready"));
-  assert.ok(!classes.has("is-visible"));
-  callback([{ isIntersecting: true }]);
-  assert.ok(classes.has("is-visible"));
-  assert.ok(observers[0].disconnected);
-  cleanup();
-  assert.equal(listeners.size, 0);
+  };
+  const window = {
+    ...events,
+    location: new URL(`http://localhost:3000/${hash}`),
+    matchMedia: (query) => ({
+      matches: query.includes("reduced-motion") ? reduced : coarse,
+      addEventListener() {},
+      removeEventListener() {},
+    }),
+    requestAnimationFrame: (fn) => { frames.set(++frameId, fn); return frameId; },
+    cancelAnimationFrame: (id) => frames.delete(id),
+  };
+  const document = {
+    querySelector: (selector) => {
+      if (selector === ".site-header") return { getBoundingClientRect: () => ({ height: headerHeight }) };
+      if (selector === hash) return {};
+      return null;
+    },
+  };
+  const { default: Provider } = loadModule("components/smooth-scroll-provider.tsx", {
+    window,
+    document,
+  }, {
+    react: { useEffect: (effect) => { cleanup = effect(); } },
+    gsap: { __esModule: true, default: gsap },
+    "gsap/ScrollTrigger": { ScrollTrigger },
+    lenis: { __esModule: true, default: LenisMock },
+  });
+  Provider({ children: null });
+  return { cleanup, frames, lenisInstances, ticker, ScrollTrigger, triggers, window };
+}
+
+test("Lenis is disabled for reduced motion and coarse pointers", () => {
+  for (const options of [{ reduced: true }, { coarse: true }]) {
+    const h = smoothScrollHarness(options);
+    assert.equal(h.lenisInstances.length, 0);
+    assert.equal(h.ScrollTrigger.refreshed, 1);
+    assert.equal(h.ticker.added, undefined);
+    h.cleanup?.();
+  }
 });
 
-test("reduced motion immediately exposes even offscreen content without an observer", () => {
-  const classes = new Set();
-  const { default: Reveal } = loadModule("components/reveal-on-scroll.tsx", {
-    window: { matchMedia: () => ({ matches: true }) },
-  }, { react: {
-    useEffect: (effect) => effect(),
-    useRef: () => ({ current: { classList: { add: (value) => classes.add(value) } } }),
-  } });
-  Reveal({ children: null });
-  assert.ok(classes.has("is-visible"));
+test("Lenis uses the GSAP ticker clock and cleans up listeners", () => {
+  const h = smoothScrollHarness({ hash: "#about", headerHeight: 96 });
+  assert.equal(h.lenisInstances.length, 1);
+  const lenis = h.lenisInstances[0];
+  assert.equal(lenis.options.anchors.offset, -96);
+  assert.equal(lenis.options.infinite, false);
+  assert.equal(lenis.options.syncTouch, false);
+  assert.equal(lenis.options.prevent({ closest: () => ({}) }), true);
+  assert.equal(h.ticker.lagValue, 0);
+  h.ticker.added(1.25);
+  assert.equal(lenis.lastRaf, 1250);
+  for (const fn of h.frames.values()) fn();
+  assert.equal(lenis.scrollTargets[0].target, "#about");
+  assert.equal(lenis.scrollTargets[0].options.offset, -96);
+  assert.equal(lenis.scrollTargets[0].options.immediate, true);
+  assert.equal(lenis.scrollTargets[0].options.force, true);
+  lenis.callback();
+  assert.equal(h.ScrollTrigger.updated, 1);
+  h.window.dispatchEvent?.("resize");
+  h.cleanup();
+  assert.equal(lenis.unsubscribed, true);
+  assert.equal(h.ticker.removed, h.ticker.added);
+  assert.equal(lenis.destroyed, true);
+  assert.equal(h.triggers[0].killed, true);
 });
 
 test("production metadata requires a genuine configured HTTPS origin", () => {

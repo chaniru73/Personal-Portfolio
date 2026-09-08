@@ -5,7 +5,8 @@ import {
   MailIcon,
   UserIcon,
 } from "@/components/icons";
-import RevealOnScroll from "@/components/reveal-on-scroll";
+import MotionLink from "@/components/motion-link";
+import MotionReveal from "@/components/motion-reveal";
 
 const contactDetails = [
   {
@@ -47,7 +48,7 @@ export default function ContactSection() {
       className="section-shell contact-panel section-frame page-panel relative px-5 py-8 sm:px-8"
     >
       <div className="content-container relative mx-auto grid w-full gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-        <RevealOnScroll variant="fade-left">
+        <MotionReveal variant="fade-left">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             Contact
           </p>
@@ -66,15 +67,16 @@ export default function ContactSection() {
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a
+            <MotionLink
               href="mailto:chaniruweerasuriya@gmail.com"
               aria-label="Send an email to Chaniru Weerasuriya"
               className="primary-button focus-ring inline-flex min-h-12 w-full items-center justify-center rounded-xl px-5 py-3 text-sm font-bold transition sm:w-auto"
+              interaction="button"
             >
               Send an Email
-            </a>
+            </MotionLink>
           </div>
-        </RevealOnScroll>
+        </MotionReveal>
 
         <aside
           aria-label="Contact information"
@@ -85,7 +87,7 @@ export default function ContactSection() {
               const Icon = detail.icon;
 
               return (
-                <RevealOnScroll
+                <MotionReveal
                   as="div"
                   key={detail.label}
                   delay={220 + index * 80}
@@ -97,22 +99,22 @@ export default function ContactSection() {
                   </dt>
                   <dd className="card-title mt-2 break-words text-base font-semibold leading-7">
                     {detail.label === "Email" ? (
-                      <a href={`mailto:${detail.value}`} className="email-link focus-ring">
+                      <MotionLink href={`mailto:${detail.value}`} className="email-link focus-ring">
                         {detail.value}
-                      </a>
+                      </MotionLink>
                     ) : detail.value}
                   </dd>
-                </RevealOnScroll>
+                </MotionReveal>
               );
             })}
           </dl>
 
-          <RevealOnScroll delay={500} className="mt-5 flex min-w-0 flex-wrap gap-3">
+          <MotionReveal delay={500} className="mt-5 flex min-w-0 flex-wrap gap-3">
             {profileLinks.map((link) => {
               const Icon = link.icon;
 
               return (
-                <a
+                <MotionLink
                   key={link.label}
                   href={link.href}
                   target="_blank"
@@ -120,13 +122,14 @@ export default function ContactSection() {
                   aria-label={`${link.label} profile opens in a new tab`}
                   title={link.label}
                   className="social-icon-link focus-ring"
+                  interaction="icon"
                 >
                   <Icon className="h-5 w-5" />
                   <span className="sr-only">{link.label}</span>
-                </a>
+                </MotionLink>
               );
             })}
-          </RevealOnScroll>
+          </MotionReveal>
         </aside>
       </div>
     </section>

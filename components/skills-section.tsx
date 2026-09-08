@@ -6,7 +6,7 @@ import {
   ServerIcon,
   ToolsIcon,
 } from "@/components/icons";
-import RevealOnScroll from "@/components/reveal-on-scroll";
+import MotionReveal from "@/components/motion-reveal";
 
 const skillCategories = [
   {
@@ -111,9 +111,10 @@ function SkillCategoryCard({
   staggerIndex: number;
 }) {
   return (
-    <RevealOnScroll
+    <MotionReveal
       as="article"
       delay={140 + staggerIndex * 80}
+      hover="card"
       className="surface-card tag-card min-w-0"
     >
       <div className="flex items-center gap-3">
@@ -129,7 +130,7 @@ function SkillCategoryCard({
           </li>
         ))}
       </ul>
-    </RevealOnScroll>
+    </MotionReveal>
   );
 }
 
@@ -143,8 +144,9 @@ function LevelGroup({
   delay: number;
 }) {
   return (
-    <RevealOnScroll
+    <MotionReveal
       delay={delay}
+      hover="card"
       className="confidence-group min-w-0"
     >
       <h4 className="card-title text-base font-bold">{title}</h4>
@@ -157,7 +159,7 @@ function LevelGroup({
           </li>
         ))}
       </ul>
-    </RevealOnScroll>
+    </MotionReveal>
   );
 }
 
@@ -170,7 +172,7 @@ export default function SkillsSection() {
       className="section-shell skills-panel section-frame page-panel relative px-5 py-8 sm:px-8"
     >
       <div className="content-container relative mx-auto w-full">
-        <RevealOnScroll className="max-w-3xl">
+        <MotionReveal className="max-w-3xl">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             Skills &amp; Tools
           </p>
@@ -186,7 +188,7 @@ export default function SkillsSection() {
             My skills have been developed through university coursework,
             practical projects, and continuous hands-on learning.
           </p>
-        </RevealOnScroll>
+        </MotionReveal>
 
         <div className="section-content-grid mt-8 grid min-w-0 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {skillCategories.map((category, index) => (

@@ -7,7 +7,7 @@ import {
   GitBranchIcon,
   LayersIcon,
 } from "@/components/icons";
-import RevealOnScroll from "@/components/reveal-on-scroll";
+import MotionReveal from "@/components/motion-reveal";
 
 const project = {
   number: "Project 01",
@@ -69,10 +69,11 @@ function ProjectDetail({
   delay?: number;
 }) {
   return (
-    <RevealOnScroll
+    <MotionReveal
       as="section"
       className="project-detail min-w-0"
       delay={delay}
+      hover="card"
       aria-labelledby={`${title.toLowerCase().replaceAll(" ", "-")}-title`}
     >
       <div className="flex items-center gap-3">
@@ -91,7 +92,7 @@ function ProjectDetail({
       <div className="body-copy mt-3 text-base leading-7">
         {children}
       </div>
-    </RevealOnScroll>
+    </MotionReveal>
   );
 }
 
@@ -104,7 +105,7 @@ export default function ProjectsSection() {
       className="section-shell projects-panel section-frame page-panel relative px-5 py-8 sm:px-8"
     >
       <div className="content-container relative mx-auto w-full">
-        <RevealOnScroll className="max-w-3xl">
+        <MotionReveal className="max-w-3xl">
           <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
             Projects
           </p>
@@ -120,12 +121,12 @@ export default function ProjectsSection() {
             A university group project where I applied software development
             concepts to practical problems.
           </p>
-        </RevealOnScroll>
+        </MotionReveal>
 
         <article
           className="project-card mt-8 grid min-w-0 gap-8 xl:grid-cols-[0.85fr_1.15fr]"
         >
-          <RevealOnScroll variant="fade-left" delay={220} className="min-w-0">
+          <MotionReveal variant="fade-left" delay={220} className="min-w-0">
             <div className="flex min-w-0 flex-wrap items-center gap-2.5">
               <span className="meta-badge text-xs font-bold uppercase">
                 {project.number}
@@ -173,7 +174,7 @@ export default function ProjectsSection() {
                 </div>
               </div>
             </div>
-          </RevealOnScroll>
+          </MotionReveal>
 
           <div className="project-details grid min-w-0 gap-6">
             <ProjectDetail title="Problem" icon={LayersIcon} delay={300}>

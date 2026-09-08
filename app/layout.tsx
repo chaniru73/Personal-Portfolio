@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
+import AnimationProvider from "@/components/animation-provider";
 import { getSiteUrl } from "@/lib/site-url";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 const siteUrl = getSiteUrl();
@@ -40,7 +42,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className="antialiased">
-      <body className="min-h-screen">{children}</body>
+      <body className="min-h-screen">
+        <AnimationProvider>{children}</AnimationProvider>
+      </body>
     </html>
   );
 }

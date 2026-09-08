@@ -1,4 +1,5 @@
 import AboutSection from "@/components/about-section";
+import AmbientBackground from "@/components/ambient-background";
 import ContactSection from "@/components/contact-section";
 import EducationSection from "@/components/education-section";
 import HomeSection from "@/components/home-section";
@@ -10,6 +11,7 @@ import SkillsSection from "@/components/skills-section";
 export default function Home() {
   return (
     <div className="page-shell relative min-h-screen">
+      <AmbientBackground />
       <a href="#main-content" className="skip-link focus-ring">Skip to content</a>
       <header className="site-header fixed inset-x-0 top-0 z-[100]">
         <SiteNavigation />
