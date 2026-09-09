@@ -4,9 +4,39 @@ import {
   DatabaseIcon,
   MonitorIcon,
   ServerIcon,
+  TechnologyMark,
   ToolsIcon,
 } from "@/components/icons";
 import MotionReveal from "@/components/motion-reveal";
+
+const technologyIcons: Record<string, { icon: string; color?: string; monochrome?: boolean }> = {
+  Java: { icon: "/icons/skills/java.svg" },
+  JavaScript: { icon: "/icons/skills/javascript.svg", color: "#d6b800", monochrome: true },
+  Dart: { icon: "/icons/skills/dart.svg", color: "#0175c2", monochrome: true },
+  Python: { icon: "/icons/skills/python.svg", color: "#3776ab", monochrome: true },
+  SQL: { icon: "/icons/skills/database.svg" },
+  HTML: { icon: "/icons/skills/html5.svg", color: "#e34f26", monochrome: true },
+  CSS: { icon: "/icons/skills/css.svg", color: "#663399", monochrome: true },
+  Bootstrap: { icon: "/icons/skills/bootstrap.svg", color: "#7952b3", monochrome: true },
+  Flutter: { icon: "/icons/skills/flutter.svg", color: "#02569b", monochrome: true },
+  "Node.js": { icon: "/icons/skills/nodedotjs.svg", color: "#339933", monochrome: true },
+  "Express.js": { icon: "/icons/skills/express.svg", color: "#202020", monochrome: true },
+  "Spring Boot": { icon: "/icons/skills/springboot.svg", color: "#6db33f", monochrome: true },
+  MySQL: { icon: "/icons/skills/mysql.svg", color: "#4479a1", monochrome: true },
+  "Microsoft SQL Server": { icon: "/icons/skills/microsoftsqlserver.svg" },
+  "Microsoft Azure": { icon: "/icons/skills/microsoftazure.svg" },
+  Git: { icon: "/icons/skills/git.svg" },
+  GitHub: { icon: "/icons/skills/github.svg" },
+  Docker: { icon: "/icons/skills/docker.svg" },
+  "GitHub Actions": { icon: "/icons/skills/githubactions.svg" },
+  "IntelliJ IDEA": { icon: "/icons/skills/intellijidea.svg" },
+  "Visual Studio Code": { icon: "/icons/skills/visualstudiocode.svg" },
+  Postman: { icon: "/icons/skills/postman.svg" },
+  SSMS: { icon: "/icons/skills/database.svg" },
+  XAMPP: { icon: "/icons/skills/xampp.svg", color: "#fb7a24", monochrome: true },
+  Figma: { icon: "/icons/skills/figma.svg" },
+  "draw.io": { icon: "/icons/skills/diagramsdotnet.svg", color: "#f08705", monochrome: true },
+};
 
 const skillCategories = [
   {
@@ -91,11 +121,39 @@ const skillLevels = [
   },
 ] as const;
 
-function SkillBadge({ skill }: { skill: string }) {
+function SkillLevelItem({ skill }: { skill: string }) {
   return (
-    <span className="skill-badge text-sm font-semibold">
+    <span className="skills-level-item text-sm font-semibold">
       {skill}
     </span>
+  );
+}
+
+function TechnologyItem({
+  skill,
+  delay,
+}: {
+  skill: string;
+  delay: number;
+}) {
+  const details = technologyIcons[skill] ?? { icon: "/icons/skills/database.svg" };
+
+  return (
+    <MotionReveal
+      as="li"
+      aria-label={`${skill} technology`}
+      delay={delay}
+      variant="scale-in"
+      className="skills-technology-item"
+    >
+      <TechnologyMark
+        icon={details.icon}
+        name={skill}
+        color={details.color}
+        monochrome={details.monochrome}
+      />
+      <span className="skills-technology-name">{skill}</span>
+    </MotionReveal>
   );
 }
 
@@ -113,21 +171,22 @@ function SkillCategoryCard({
   return (
     <MotionReveal
       as="article"
-      delay={140 + staggerIndex * 80}
-      hover="card"
-      className="surface-card tag-card min-w-0"
+      delay={180 + staggerIndex * 70}
+      className="skills-category min-w-0"
     >
-      <div className="flex items-center gap-3">
-        <span className="icon-bubble">
+      <div className="skills-category-heading flex items-center gap-3">
+        <span className="skills-category-icon">
           <Icon className="h-5 w-5" />
         </span>
-        <h3 className="card-title text-base font-bold">{title}</h3>
+        <h4 className="skills-category-title font-bold">{title}</h4>
       </div>
-      <ul className="tag-list mt-4">
-        {skills.map((skill) => (
-          <li key={skill} className="min-w-0 max-w-full">
-            <SkillBadge skill={skill} />
-          </li>
+      <ul className="skills-technology-grid">
+        {skills.map((skill, index) => (
+          <TechnologyItem
+            key={skill}
+            skill={skill}
+            delay={260 + staggerIndex * 65 + Math.floor(index / 4) * 55}
+          />
         ))}
       </ul>
     </MotionReveal>
@@ -138,24 +197,31 @@ function LevelGroup({
   title,
   skills,
   delay,
+  className = "",
+  labelledBy,
+  showTitle = true,
 }: {
   title: string;
   skills: readonly string[];
   delay: number;
+  className?: string;
+  labelledBy?: string;
+  showTitle?: boolean;
 }) {
   return (
     <MotionReveal
+      as="article"
+      aria-labelledby={labelledBy}
       delay={delay}
-      hover="card"
-      className="confidence-group min-w-0"
+      className={`skills-level-group min-w-0 ${className}`.trim()}
     >
-      <h4 className="card-title text-base font-bold">{title}</h4>
-      <ul className="tag-list mt-4">
+      {showTitle ? (
+        <h4 className="skills-level-title text-base font-bold">{title}</h4>
+      ) : null}
+      <ul className="skills-level-list">
         {skills.map((skill) => (
           <li key={skill} className="min-w-0 max-w-full">
-            <span className="skill-badge text-sm font-medium">
-              {skill}
-            </span>
+            <SkillLevelItem skill={skill} />
           </li>
         ))}
       </ul>
@@ -169,66 +235,90 @@ export default function SkillsSection() {
       id="skills"
       tabIndex={-1}
       aria-labelledby="skills-title"
-      className="section-shell skills-panel section-frame page-panel relative px-5 py-8 sm:px-8"
+      className="section-shell skills-panel section-frame page-panel relative"
     >
-      <div className="content-container relative mx-auto w-full">
-        <MotionReveal className="max-w-3xl">
-          <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
-            Skills &amp; Tools
+      <div className="skills-layout relative mx-auto w-full">
+        <MotionReveal className="skills-introduction text-center">
+          <p className="skills-badge mx-auto inline-flex text-sm font-bold">
+            SKILLS
           </p>
 
           <h2
             id="skills-title"
-            className="section-title text-3xl font-bold tracking-normal sm:text-4xl lg:text-5xl"
+            className="skills-title section-title mx-auto font-bold tracking-normal"
           >
             Technologies I use and continue to develop.
           </h2>
 
-          <p className="body-copy mt-6 max-w-2xl text-base leading-8 sm:text-lg">
+          <p className="skills-summary body-copy mx-auto text-base">
             My skills have been developed through university coursework,
             practical projects, and continuous hands-on learning.
           </p>
         </MotionReveal>
 
-        <div className="section-content-grid mt-8 grid min-w-0 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {skillCategories.map((category, index) => (
-            <SkillCategoryCard
-              key={category.title}
-              title={category.title}
-              icon={category.icon}
-              skills={category.skills}
-              staggerIndex={index}
-            />
-          ))}
-        </div>
+        <section aria-labelledby="core-stack-title" className="skills-core-stack">
+          <MotionReveal
+            as="h3"
+            id="core-stack-title"
+            delay={100}
+            className="skills-area-title"
+          >
+            Core Technology Stack
+          </MotionReveal>
 
-        <aside
-          aria-labelledby="skill-level-title"
-          className="confidence-shell"
-        >
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="accent-text text-sm font-bold uppercase">
-                Current Skill Level
-              </p>
-              <h3
-                id="skill-level-title"
-                className="card-title mt-3 text-2xl font-bold tracking-normal"
-              >
-                Practical familiarity by focus area.
-              </h3>
-            </div>
-          </div>
-
-          <div className="confidence-grid mt-6 grid min-w-0 gap-6">
-            {skillLevels.map((level, index) => (
-              <LevelGroup
-                key={level.title}
-                title={level.title}
-                skills={level.skills}
-                delay={760 + index * 80}
+          <div className="skills-category-grid grid min-w-0">
+            {skillCategories.map((category, index) => (
+              <SkillCategoryCard
+                key={category.title}
+                title={category.title}
+                icon={category.icon}
+                skills={category.skills}
+                staggerIndex={index}
               />
             ))}
+          </div>
+        </section>
+
+        <section aria-labelledby="learning-title" className="skills-proficiency-area">
+          <MotionReveal
+            as="h3"
+            id="learning-title"
+            delay={700}
+            className="skills-area-title"
+          >
+            Currently Learning
+          </MotionReveal>
+          <LevelGroup
+            title="Currently Learning"
+            skills={skillLevels[1].skills}
+            delay={760}
+            className="skills-learning-group"
+            labelledBy="learning-title"
+            showTitle={false}
+          />
+        </section>
+
+        <aside aria-labelledby="skill-level-title" className="skills-proficiency-area">
+          <MotionReveal delay={820}>
+            <h3 id="skill-level-title" className="skills-area-title">
+              Current Skill Level
+            </h3>
+            <p className="skills-level-summary body-copy text-base">
+              Practical familiarity by focus area.
+            </p>
+          </MotionReveal>
+
+          <div className="skills-level-grid grid min-w-0">
+            <LevelGroup
+              title={skillLevels[0].title}
+              skills={skillLevels[0].skills}
+              delay={880}
+            />
+            <LevelGroup
+              title={skillLevels[2].title}
+              skills={skillLevels[2].skills}
+              delay={960}
+            />
           </div>
         </aside>
       </div>

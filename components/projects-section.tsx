@@ -1,11 +1,10 @@
-import type { ReactNode } from "react";
-
 import {
   CheckIcon,
   DatabaseIcon,
   ExternalIcon,
   GitBranchIcon,
   LayersIcon,
+  ServerIcon,
 } from "@/components/icons";
 import MotionReveal from "@/components/motion-reveal";
 
@@ -49,50 +48,25 @@ const project = {
   ],
 } as const;
 
-function TechnologyTag({ technology }: { technology: string }) {
-  return (
-    <span className="skill-badge text-sm font-semibold">
-      {technology}
-    </span>
-  );
-}
+const projectViews = ["Overview", "Features", "Technology"] as const;
+const technicalFocus = ["Backend", "APIs", "Database", "Access Control"] as const;
 
-function ProjectDetail({
-  title,
-  children,
+function PanelHeading({
   icon: Icon,
-  delay,
+  id,
+  children,
 }: {
-  title: string;
-  children: ReactNode;
-  icon?: typeof CheckIcon;
-  delay?: number;
+  icon: typeof LayersIcon;
+  id: string;
+  children: string;
 }) {
   return (
-    <MotionReveal
-      as="section"
-      className="project-detail min-w-0"
-      delay={delay}
-      hover="card"
-      aria-labelledby={`${title.toLowerCase().replaceAll(" ", "-")}-title`}
-    >
-      <div className="flex items-center gap-3">
-        {Icon ? (
-          <span className="icon-bubble icon-bubble-sm">
-            <Icon className="h-4.5 w-4.5" />
-          </span>
-        ) : null}
-        <h4
-          id={`${title.toLowerCase().replaceAll(" ", "-")}-title`}
-          className="accent-text text-sm font-bold uppercase"
-        >
-          {title}
-        </h4>
-      </div>
-      <div className="body-copy mt-3 text-base leading-7">
-        {children}
-      </div>
-    </MotionReveal>
+    <div className="projects-panel-heading">
+      <span className="projects-panel-icon" aria-hidden="true">
+        <Icon className="h-4 w-4" />
+      </span>
+      <h3 id={id}>{children}</h3>
+    </div>
   );
 }
 
@@ -102,142 +76,187 @@ export default function ProjectsSection() {
       id="projects"
       tabIndex={-1}
       aria-labelledby="projects-title"
-      className="section-shell projects-panel section-frame page-panel relative px-5 py-8 sm:px-8"
+      className="section-shell projects-panel section-frame page-panel"
     >
-      <div className="content-container relative mx-auto w-full">
-        <MotionReveal className="max-w-3xl">
-          <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
-            Projects
-          </p>
-
-          <h2
+      <div className="projects-showcase">
+        <MotionReveal className="projects-banner" variant="fade-up">
+          <div aria-hidden="true" className="projects-banner-pattern">
+            <span className="projects-banner-node projects-banner-node-one" />
+            <span className="projects-banner-node projects-banner-node-two" />
+            <span className="projects-banner-node projects-banner-node-three" />
+          </div>
+          <MotionReveal
+            as="h2"
             id="projects-title"
-            className="section-title text-3xl font-bold tracking-normal sm:text-4xl lg:text-5xl"
+            className="projects-outline-title"
+            variant="scale-in"
+            delay={80}
           >
+            Projects
+          </MotionReveal>
+          <p className="projects-banner-heading">
             Practical work that reflects how I learn and build.
-          </h2>
-
-          <p className="body-copy mt-6 max-w-2xl text-base leading-8 sm:text-lg">
+          </p>
+          <p className="projects-banner-copy">
             A university group project where I applied software development
             concepts to practical problems.
           </p>
         </MotionReveal>
 
-        <article
-          className="project-card mt-8 grid min-w-0 gap-8 xl:grid-cols-[0.85fr_1.15fr]"
-        >
-          <MotionReveal variant="fade-left" delay={220} className="min-w-0">
-            <div className="flex min-w-0 flex-wrap items-center gap-2.5">
-              <span className="meta-badge text-xs font-bold uppercase">
-                {project.number}
-              </span>
-              <span className="meta-badge text-xs font-bold uppercase">
-                {project.type}
-              </span>
-              <span className="status-badge rounded-md px-3 py-1.5 text-xs font-bold uppercase">
-                {project.status}
-              </span>
+        <MotionReveal className="projects-information-strip" delay={140}>
+          <ul aria-label="Project information groups">
+            {projectViews.map((view, index) => (
+              <li key={view}>
+                <span aria-hidden="true">0{index + 1}</span>
+                {view}
+              </li>
+            ))}
+          </ul>
+        </MotionReveal>
+
+        <article className="projects-mosaic" aria-labelledby="project-name">
+          <MotionReveal
+            as="section"
+            className="projects-mosaic-panel projects-identity-panel"
+            variant="scale-in"
+            delay={220}
+            hover="card"
+            aria-labelledby="project-name"
+          >
+            <span aria-hidden="true" className="projects-panel-pattern projects-network-pattern" />
+            <div className="projects-project-meta">
+              <span>{project.number}</span>
+              <span>{project.type}</span>
+              <span className="projects-completed-status">{project.status}</span>
             </div>
 
-            <h3 className="card-title mt-6 text-2xl font-bold tracking-normal sm:text-3xl">
+            <div className="projects-system-visual" aria-label="Project visual placeholder" role="img">
+              <span aria-hidden="true" className="projects-system-core">
+                <ServerIcon className="h-8 w-8" />
+              </span>
+              <span aria-hidden="true" className="projects-system-line projects-system-line-one" />
+              <span aria-hidden="true" className="projects-system-line projects-system-line-two" />
+              <span aria-hidden="true" className="projects-system-node projects-system-node-one" />
+              <span aria-hidden="true" className="projects-system-node projects-system-node-two" />
+              <span aria-hidden="true" className="projects-system-node projects-system-node-three" />
+            </div>
+
+            <h3 id="project-name" className="projects-project-title">
               {project.name}
             </h3>
-
-            <p className="body-copy mt-4 text-base leading-8">
-              {project.description}
-            </p>
-
-            <div
-              aria-label="Project visual placeholder"
-              className="project-visual mt-6 overflow-hidden rounded-2xl p-4"
-            >
-              <div className="project-window rounded-xl p-4">
-                <div className="mb-5 flex items-center gap-2">
-                  <span className="window-dot" />
-                  <span className="window-dot window-dot-muted" />
-                  <span className="window-dot window-dot-accent" />
-                </div>
-                <p className="card-title text-lg font-bold">
-                  University ERP System
-                </p>
-                <div className="tag-list mt-6 text-sm font-semibold text-[var(--color-accent-strong)]">
-                  {["Backend", "APIs", "Database", "Access Control"].map(
-                    (item) => (
-                      <span
-                        key={item}
-                        className="skill-badge text-sm font-semibold"
-                      >
-                        {item}
-                      </span>
-                    ),
-                  )}
-                </div>
-              </div>
+            <div className="projects-focus-list" aria-label="Project technical focus">
+              {technicalFocus.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
             </div>
           </MotionReveal>
 
-          <div className="project-details grid min-w-0 gap-6">
-            <ProjectDetail title="Problem" icon={LayersIcon} delay={300}>
-              <p>{project.problem}</p>
-            </ProjectDetail>
+          <MotionReveal
+            as="section"
+            className="projects-mosaic-panel projects-overview-panel"
+            variant="fade-left"
+            delay={290}
+            hover="card"
+            aria-labelledby="project-overview-title"
+          >
+            <span aria-hidden="true" className="projects-panel-pattern projects-grid-pattern" />
+            <PanelHeading icon={LayersIcon} id="project-overview-title">
+              Project overview
+            </PanelHeading>
+            <p>{project.description}</p>
+          </MotionReveal>
 
-            <ProjectDetail
-              title="My contribution"
-              icon={DatabaseIcon}
-              delay={380}
-            >
-              <p>{project.contribution}</p>
-            </ProjectDetail>
+          <MotionReveal
+            as="section"
+            className="projects-mosaic-panel projects-problem-panel"
+            variant="fade-right"
+            delay={360}
+            hover="card"
+            aria-labelledby="project-problem-title"
+          >
+            <span aria-hidden="true" className="projects-panel-pattern projects-api-pattern" />
+            <PanelHeading icon={LayersIcon} id="project-problem-title">
+              Problem
+            </PanelHeading>
+            <p>{project.problem}</p>
+          </MotionReveal>
 
-            <ProjectDetail title="Key features" icon={CheckIcon} delay={460}>
-              <ul className="grid gap-3">
-                {project.keyFeatures.map((feature) => (
-                  <li key={feature} className="flex min-w-0 gap-3">
-                    <span
-                      aria-hidden="true"
-                      className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent)]"
-                    />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </ProjectDetail>
+          <MotionReveal
+            as="section"
+            className="projects-mosaic-panel projects-contribution-panel"
+            variant="fade-left"
+            delay={430}
+            hover="card"
+            aria-labelledby="project-contribution-title"
+          >
+            <span aria-hidden="true" className="projects-panel-pattern projects-terminal-pattern" />
+            <PanelHeading icon={DatabaseIcon} id="project-contribution-title">
+              My contribution
+            </PanelHeading>
+            <p>{project.contribution}</p>
+          </MotionReveal>
 
-            <ProjectDetail title="Technologies" icon={LayersIcon} delay={540}>
-              <ul className="tag-list">
-                {project.technologies.map((technology) => (
-                  <li key={technology} className="min-w-0 max-w-full">
-                    <TechnologyTag technology={technology} />
-                  </li>
-                ))}
-              </ul>
-            </ProjectDetail>
+          <MotionReveal
+            as="section"
+            className="projects-mosaic-panel projects-features-panel"
+            variant="fade-right"
+            delay={500}
+            hover="card"
+            aria-labelledby="project-features-title"
+          >
+            <span aria-hidden="true" className="projects-panel-pattern projects-access-pattern" />
+            <PanelHeading icon={CheckIcon} id="project-features-title">
+              Key features
+            </PanelHeading>
+            <ul className="projects-feature-list">
+              {project.keyFeatures.map((feature) => (
+                <li key={feature}>
+                  <CheckIcon className="h-4 w-4" aria-hidden="true" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </MotionReveal>
 
-            <ProjectDetail title="Links" delay={620}>
-              <dl className="project-link-status grid gap-4 sm:grid-cols-2">
-                {project.links.map((link) => {
-                  const Icon =
-                    link.label === "Repository" ? GitBranchIcon : ExternalIcon;
+          <MotionReveal
+            as="section"
+            className="projects-mosaic-panel projects-technology-panel"
+            delay={570}
+            hover="card"
+            aria-labelledby="project-technology-title"
+          >
+            <span aria-hidden="true" className="projects-panel-pattern projects-database-pattern" />
+            <PanelHeading icon={DatabaseIcon} id="project-technology-title">
+              Technologies and availability
+            </PanelHeading>
 
-                  return (
-                    <div
-                      key={link.label}
-                      className="detail-row"
-                    >
-                      <dt className="accent-text flex items-center gap-2 text-xs font-bold uppercase">
-                        <Icon className="h-4 w-4" />
-                        <span>{link.label}</span>
-                      </dt>
-                      <dd className="body-copy mt-1 text-base font-medium leading-7">
-                        {link.text}
-                      </dd>
-                    </div>
-                  );
-                })}
-              </dl>
-            </ProjectDetail>
-          </div>
+            <ul className="projects-technology-list" aria-label="Project technologies">
+              {project.technologies.map((technology) => (
+                <li key={technology}>{technology}</li>
+              ))}
+            </ul>
+
+            <dl className="projects-availability-list">
+              {project.links.map((link) => {
+                const Icon = link.label === "Repository" ? GitBranchIcon : ExternalIcon;
+
+                return (
+                  <div key={link.label}>
+                    <dt>
+                      <Icon className="h-4 w-4" aria-hidden="true" />
+                      {link.label}
+                    </dt>
+                    <dd>{link.text}</dd>
+                  </div>
+                );
+              })}
+            </dl>
+          </MotionReveal>
         </article>
+
+        <MotionReveal as="p" className="projects-closing-message" delay={700}>
+          More practical projects are in development.
+        </MotionReveal>
       </div>
     </section>
   );

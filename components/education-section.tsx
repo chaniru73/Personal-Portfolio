@@ -1,27 +1,18 @@
-import { BookIcon, EducationIcon, StrengthIcon } from "@/components/icons";
+import {
+  BookIcon,
+  CheckIcon,
+  EducationIcon,
+  LocationIcon,
+  StrengthIcon,
+} from "@/components/icons";
 import MotionReveal from "@/components/motion-reveal";
 
 const educationDetails = [
-  {
-    label: "Degree",
-    value: "BSc (Hons) in Software Engineering",
-  },
-  {
-    label: "Institution",
-    value: "NSBM Green University",
-  },
-  {
-    label: "Current level",
-    value: "Third-year undergraduate",
-  },
-  {
-    label: "Status",
-    value: "In Progress",
-  },
-  {
-    label: "Expected graduation",
-    value: "2028",
-  },
+  { label: "Degree", value: "BSc (Hons) in Software Engineering", icon: EducationIcon },
+  { label: "Institution", value: "NSBM Green University", icon: LocationIcon },
+  { label: "Current level", value: "Third-year undergraduate", icon: BookIcon },
+  { label: "Status", value: "In Progress", icon: CheckIcon },
+  { label: "Expected graduation", value: "2028", icon: EducationIcon },
 ] as const;
 
 const studyAreas = [
@@ -39,99 +30,88 @@ export default function EducationSection() {
       id="education"
       tabIndex={-1}
       aria-labelledby="education-title"
-      className="section-shell education-panel section-frame page-panel relative px-5 py-8 sm:px-8"
+      className="section-shell education-panel section-frame page-panel relative"
     >
-      <div className="content-container relative mx-auto grid w-full gap-8">
-        <MotionReveal variant="fade-left" className="max-w-3xl">
-          <p className="eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-medium">
-            Education
-          </p>
-
+      <div className="education-layout relative mx-auto w-full">
+        <MotionReveal className="education-introduction text-center">
+          <p className="education-badge mx-auto inline-flex text-sm font-bold">EDUCATION</p>
           <h2
             id="education-title"
-            className="section-title max-w-3xl text-3xl font-bold tracking-normal sm:text-4xl lg:text-5xl"
+            className="education-title section-title mx-auto font-bold tracking-normal"
           >
             Academic foundations supporting my technical growth.
           </h2>
-
-          <p className="body-copy mt-6 max-w-2xl text-base leading-8 sm:text-lg">
+          <p className="education-summary body-copy mx-auto text-base">
             My degree studies are helping me build a strong understanding of
             software development, system design, security, data, and
             user-centred technology.
           </p>
         </MotionReveal>
 
-        <article
-          className="surface-card education-card grid min-w-0 gap-6 p-5 sm:p-7 lg:grid-cols-2"
-        >
-          <div className="flex min-w-0 flex-wrap items-center justify-between gap-3 lg:col-span-2">
-            <div className="flex min-w-0 items-start gap-3">
-              <span className="icon-bubble">
-                <EducationIcon className="h-5 w-5" />
-              </span>
-              <h3 className="card-title text-2xl font-bold tracking-normal">
-                BSc (Hons) in Software Engineering
-              </h3>
-            </div>
-            <span className="status-badge rounded-md px-3 py-1.5 text-xs font-bold uppercase">
-              In Progress
+        <MotionReveal as="article" delay={140} className="education-card">
+          <header className="education-degree-heading">
+            <span className="education-heading-icon" aria-hidden="true">
+              <EducationIcon className="h-6 w-6" />
             </span>
-          </div>
+            <div>
+              <p className="education-kicker">Current degree</p>
+              <h3>BSc (Hons) in Software Engineering</h3>
+            </div>
+            <span className="education-status">In Progress</span>
+          </header>
 
-          <dl className="education-details grid min-w-0 gap-4 sm:grid-cols-2 lg:row-span-2">
-            {educationDetails.map((detail, index) => (
-              <MotionReveal
-                as="div"
-                key={detail.label}
-                delay={240 + index * 70}
-                hover="card"
-                className="detail-row min-w-0"
-              >
-                <dt className="accent-text text-xs font-bold uppercase">
-                  {detail.label}
-                </dt>
-                <dd className="card-title mt-2 break-words text-base font-semibold leading-7">
-                  {detail.value}
-                </dd>
-              </MotionReveal>
-            ))}
+          <dl className="education-metadata">
+            {educationDetails.map((detail, index) => {
+              const Icon = detail.icon;
+              return (
+                <MotionReveal
+                  as="div"
+                  key={detail.label}
+                  delay={220 + index * 65}
+                  className="education-meta-item"
+                >
+                  <dt>
+                    <Icon className="h-4 w-4" aria-hidden="true" />
+                    {detail.label}
+                  </dt>
+                  <dd>{detail.value}</dd>
+                </MotionReveal>
+              );
+            })}
           </dl>
 
-          <MotionReveal delay={160}>
-            <div className="flex items-center gap-3">
-              <span className="icon-bubble icon-bubble-sm">
-                <BookIcon className="h-4.5 w-4.5" />
-              </span>
-              <h4 className="accent-text text-sm font-bold uppercase">
-                Relevant study areas
-              </h4>
+          <MotionReveal delay={580} className="education-study-areas">
+            <div className="education-subheading">
+              <BookIcon className="h-5 w-5" aria-hidden="true" />
+              <h4>Relevant study areas</h4>
             </div>
-            <ul className="tag-list mt-4">
-              {studyAreas.map((area) => (
-                <li key={area} className="min-w-0 max-w-full">
-                  <span className="skill-badge text-sm font-semibold">
-                    {area}
-                  </span>
-                </li>
-              ))}
+            <ul>
+              {studyAreas.map((area) => <li key={area}>{area}</li>)}
             </ul>
           </MotionReveal>
 
-          <MotionReveal
-            as="p"
-            delay={700}
-            className="supporting-note text-base leading-7"
-          >
-            <StrengthIcon className="mr-2 inline h-4.5 w-4.5 align-[-0.15em] text-[var(--color-accent)]" />
-            I&apos;m developing practical experience through university projects and
-            technical coursework while strengthening my software engineering,
-            backend, cloud, and DevOps knowledge.
-          </MotionReveal>
-          <MotionReveal as="p" delay={200} className="body-copy text-base leading-7 lg:col-span-2">
-            Additional certifications are not currently listed in this
-            portfolio.
-          </MotionReveal>
-        </article>
+          <div className="education-support-grid">
+            <MotionReveal as="article" delay={650} className="education-support-panel">
+              <div className="education-subheading">
+                <StrengthIcon className="h-5 w-5" aria-hidden="true" />
+                <h4>Practical Experience</h4>
+              </div>
+              <p>
+                I&apos;m developing practical experience through university projects and
+                technical coursework while strengthening my software engineering,
+                backend, cloud, and DevOps knowledge.
+              </p>
+            </MotionReveal>
+
+            <MotionReveal as="article" delay={720} className="education-support-panel">
+              <div className="education-subheading">
+                <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                <h4>Certification Status</h4>
+              </div>
+              <p>Additional certifications are not currently listed in this portfolio.</p>
+            </MotionReveal>
+          </div>
+        </MotionReveal>
       </div>
     </section>
   );

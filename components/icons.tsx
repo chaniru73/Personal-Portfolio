@@ -1,8 +1,43 @@
-import type { SVGProps } from "react";
+import Image from "next/image";
+import type { CSSProperties, SVGProps } from "react";
 
 type IconProps = SVGProps<SVGSVGElement> & {
   title?: string;
 };
+
+type TechnologyMarkProps = {
+  icon: string;
+  name: string;
+  color?: string;
+  monochrome?: boolean;
+};
+
+export function TechnologyMark({ icon, name, color, monochrome = false }: TechnologyMarkProps) {
+  return (
+    <span aria-hidden="true" className="technology-mark">
+      {monochrome ? (
+        <span
+          className="technology-logo-mask"
+          title={`${name} logo`}
+          style={{
+            "--technology-color": color,
+            "--technology-icon": `url("${icon}")`,
+          } as CSSProperties}
+        />
+      ) : (
+        <Image
+          src={icon}
+          alt=""
+          width={56}
+          height={56}
+          sizes="56px"
+          className="technology-logo"
+          title={`${name} logo`}
+        />
+      )}
+    </span>
+  );
+}
 
 function LineIcon({ children, title, ...props }: IconProps) {
   return (

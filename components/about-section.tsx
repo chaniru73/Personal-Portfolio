@@ -3,7 +3,7 @@ import {
   EducationIcon,
   StrengthIcon,
 } from "@/components/icons";
-import MotionReveal from "@/components/motion-reveal";
+import MotionReveal, { type MotionRevealProps } from "@/components/motion-reveal";
 
 const education = [
   "BSc (Hons) in Software Engineering",
@@ -37,12 +37,14 @@ function DetailList({
   items,
   icon: Icon,
   delay,
+  motionVariant = "fade-up",
   variant = "tags",
 }: {
   title: string;
   items: readonly string[];
   icon: typeof EducationIcon;
   delay: number;
+  motionVariant?: MotionRevealProps["variant"];
   variant?: "rows" | "tags";
 }) {
   return (
@@ -50,10 +52,11 @@ function DetailList({
       as="article"
       delay={delay}
       hover="card"
-      className="about-info-card surface-card rounded-2xl p-6 sm:p-7"
+      variant={motionVariant}
+      className="about-info-card surface-card"
     >
       <div className="about-card-heading flex items-center gap-3">
-        <span className="icon-bubble">
+        <span className="about-card-icon icon-bubble">
           <Icon className="h-5 w-5" />
         </span>
         <h3 className="card-title text-lg font-bold tracking-normal">
@@ -62,7 +65,7 @@ function DetailList({
       </div>
 
       {variant === "rows" ? (
-        <ul className="about-info-rows body-copy mt-6 grid gap-4 text-base leading-7">
+        <ul className="about-info-rows body-copy grid text-base">
           {items.map((item) => (
             <li key={item} className="flex gap-3">
               <span
@@ -74,7 +77,7 @@ function DetailList({
           ))}
         </ul>
       ) : (
-        <ul className="about-tag-list mt-6 flex flex-wrap gap-3">
+        <ul className="about-tag-list flex flex-wrap">
           {items.map((item) => (
             <li key={item} className="skill-badge">
               {item}
@@ -92,34 +95,35 @@ export default function AboutSection() {
       id="about"
       tabIndex={-1}
       aria-labelledby="about-title"
-      className="section-shell about-panel section-frame page-panel relative px-5 py-8 sm:px-8"
+      className="section-shell about-panel section-frame page-panel relative"
     >
-      <div className="about-layout content-container relative mx-auto flex w-full flex-col items-center">
-        <div className="about-main mx-auto w-full max-w-[1020px]">
+      <div className="about-layout relative mx-auto flex w-full flex-col items-center">
+        <div className="about-main mx-auto w-full">
           <MotionReveal
             as="p"
             delay={40}
-            className="about-badge eyebrow mx-auto inline-flex rounded-full px-4 py-2 text-sm font-medium"
+            variant="scale-in"
+            className="about-badge mx-auto inline-flex text-sm font-bold"
           >
-            About Me
+            ABOUT ME
           </MotionReveal>
 
           <MotionReveal
             as="h2"
             id="about-title"
-            delay={120}
-            className="about-title section-title mx-auto max-w-4xl text-center text-3xl font-bold tracking-normal sm:text-4xl lg:text-5xl"
+            delay={110}
+            className="about-title section-title mx-auto text-center font-bold tracking-normal"
           >
             Building software with a focus on reliable delivery.
           </MotionReveal>
 
-          <div className="about-paragraphs body-copy mx-auto text-base leading-8 sm:text-lg">
-            <MotionReveal as="p" delay={220}>
+          <div className="about-paragraphs body-copy mx-auto text-base">
+            <MotionReveal as="p" delay={180}>
               I&apos;m a third-year BSc (Hons) Software Engineering undergraduate
               at NSBM Green University. I chose this field because I enjoy
               solving problems and turning ideas into useful applications.
             </MotionReveal>
-            <MotionReveal as="p" delay={300}>
+            <MotionReveal as="p" delay={250}>
               I&apos;m currently developing my skills in Java, Spring Boot,
               Node.js, SQL, Git and GitHub, Docker, cloud technologies, DevOps,
               software architecture, and web development. Cloud and DevOps
@@ -127,7 +131,7 @@ export default function AboutSection() {
               maintain software more efficiently through automation and reliable
               delivery practices.
             </MotionReveal>
-            <MotionReveal as="p" delay={380}>
+            <MotionReveal as="p" delay={320}>
               I value continuous learning, teamwork, adaptability, and taking
               responsibility for my work. My goal is to become a skilled
               Software Engineer with strong development, cloud, and DevOps
@@ -135,33 +139,46 @@ export default function AboutSection() {
             </MotionReveal>
           </div>
 
-          <MotionReveal delay={480}>
-            <p className="about-opportunity soft-card mx-auto rounded-2xl px-5 py-4 text-center text-sm font-semibold leading-7 text-[var(--color-heading)] sm:text-base">
+          <MotionReveal delay={390}>
+            <p className="about-opportunity mx-auto text-center text-base font-semibold">
               I&apos;m open to Software Engineering, Backend Development, Cloud,
               and DevOps internships or entry-level opportunities.
             </p>
           </MotionReveal>
         </div>
 
-        <div className="about-card-grid grid w-full">
+        <MotionReveal delay={460} className="about-explore-block">
+          <div className="about-explore-row">
+            <span aria-hidden="true" className="about-explore-line" />
+            <a className="about-explore-link focus-ring" href="#about-details">
+              EXPLORE
+            </a>
+            <span aria-hidden="true" className="about-explore-line" />
+          </div>
+          <div aria-hidden="true" className="about-divider" />
+        </MotionReveal>
+
+        <div id="about-details" className="about-card-grid grid w-full">
           <DetailList
             title="Education"
             items={education}
             icon={EducationIcon}
-            delay={580}
+            delay={540}
+            motionVariant="fade-left"
             variant="rows"
           />
           <DetailList
             title="Currently Learning"
             items={currentlyLearning}
             icon={BookIcon}
-            delay={670}
+            delay={620}
+            motionVariant="fade-right"
           />
           <DetailList
             title="Core Strengths"
             items={coreStrengths}
             icon={StrengthIcon}
-            delay={760}
+            delay={700}
           />
         </div>
       </div>
