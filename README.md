@@ -66,5 +66,5 @@ Version 1 contains the main portfolio sections and is deployed on Vercel. Projec
 ## Contact
 
 - GitHub: https://github.com/chaniru73
-- LinkedIn: https://www.linkedin.com/in/chaniru-weerasuriya-a89607373
+- LinkedIn: www.linkedin.com/in/chaniru-weerasuriya
 - Email: chaniruweerasuriya@gmail.com
