@@ -665,7 +665,7 @@ test("Education preserves its complete content in the editorial theme", () => {
   for (const item of content) assert.ok(source.includes(item), item);
 });
 
-test("Contact ends with the email form while details remain in the footer", () => {
+test("Contact ends with the email form while footer keeps compact contact actions", () => {
   const source = readFileSync(new URL("components/contact-section.tsx", root), "utf8");
   const footerSource = readFileSync(new URL("components/site-footer.tsx", root), "utf8");
 
@@ -676,7 +676,7 @@ test("Contact ends with the email form while details remain in the footer", () =
   assert.match(source, /<ContactForm \/>/);
   assert.doesNotMatch(source, /contact-details|contact-socials|Chaniru Weerasuriya|Malabe, Sri Lanka|github\.com|linkedin\.com/);
   assert.match(footerSource, /Chaniru Weerasuriya/);
-  assert.match(footerSource, /Malabe, Sri Lanka/);
+  assert.doesNotMatch(footerSource, /Malabe, Sri Lanka/);
   assert.match(footerSource, /mailto:chaniruweerasuriya@gmail\.com/);
   assert.doesNotMatch(source, /Facebook|Instagram|twitter\.com|x\.com/);
 });
@@ -716,16 +716,28 @@ test("Footer remains full width with real navigation and contact links", () => {
   assert.match(source, /https:\/\/www\.linkedin\.com\/in\/chaniru-weerasuriya-a89607373/);
   assert.match(source, /mailto:chaniruweerasuriya@gmail\.com/);
   assert.match(source, /new Date\(\)\.getFullYear\(\)/);
-  assert.match(source, /Chaniru Weerasuriya\. All Rights Reserved\./);
+  assert.match(source, /Chaniru Weerasuriya\. All rights reserved\./);
   assert.match(source, /Built with Next\.js, TypeScript, and Tailwind CSS\./);
-  assert.ok(source.indexOf("site-footer-back-to-top") < source.indexOf("site-footer-identity"));
-  assert.ok(source.indexOf("site-footer-identity") < source.indexOf("site-footer-socials"));
+  assert.doesNotMatch(source, /site-footer-identity|site-footer-name|site-footer-location/);
+  assert.doesNotMatch(source, /Malabe, Sri Lanka/);
+  assert.ok(source.indexOf("site-footer-back-to-top") < source.indexOf("site-footer-socials"));
   assert.ok(source.indexOf("site-footer-socials") < source.indexOf("site-footer-meta"));
-  assert.ok(source.indexOf("site-footer-name") < source.indexOf("site-footer-location"));
+  assert.ok(source.indexOf("Chaniru Weerasuriya. All rights reserved.") > source.indexOf("site-footer-meta"));
+  assert.ok(source.indexOf("https://www.linkedin.com/in/chaniru-weerasuriya-a89607373") < source.indexOf("https://github.com/chaniru73"));
+  assert.ok(source.indexOf("https://github.com/chaniru73") < source.indexOf("mailto:chaniruweerasuriya@gmail.com"));
+  assert.doesNotMatch(source, /<MotionReveal[^>]*(?:site-footer-identity|site-footer-socials|site-footer-meta)/s);
+  assert.doesNotMatch(source, /<MotionReveal[^>]*delay=\{(?:240|300|380)\}/);
+  assert.doesNotMatch(cssSource, /\.site-footer-(?:identity|name|location)\b/);
   assert.match(cssSource, /\.site-footer-shell\s*\{[^}]*width:\s*100%/s);
+  assert.match(cssSource, /\.site-footer-shell\s*\{[^}]*overflow:\s*visible/s);
   assert.match(cssSource, /\.site-footer-inner\s*\{[^}]*margin-inline:\s*auto/s);
+  assert.match(cssSource, /\.site-footer-inner\s*\{[^}]*overflow:\s*visible/s);
   assert.match(cssSource, /\.site-footer-back-to-top\s*\{[^}]*flex-direction:\s*column/s);
-  assert.match(cssSource, /\.site-footer-social-link\s*\{[^}]*width:\s*2\.625rem[^}]*height:\s*2\.625rem/s);
+  assert.match(cssSource, /\.site-footer-social-link\s*\{[^}]*width:\s*2\.375rem[^}]*height:\s*2\.375rem[^}]*flex:\s*0 0 2\.375rem[^}]*aspect-ratio:\s*1[^}]*padding:\s*0/s);
+  assert.doesNotMatch(cssSource, /\.site-footer-shell\s*\{[^}]*min-height/s);
+  assert.doesNotMatch(cssSource, /\.site-footer-shell\s*\{[^}]*height:\s*(?:100|[0-9]+s?vh)/s);
+  assert.doesNotMatch(cssSource, /\.site-footer-inner\s*\{[^}]*min-height/s);
+  assert.doesNotMatch(cssSource, /\.site-footer-(?:shell|inner|socials|social-link|meta)\s*\{[^}]*overflow:\s*(?:hidden|clip)/s);
 });
 
 test("Contact and footer content has no permanent hidden or clipping state", () => {
@@ -741,7 +753,6 @@ test("Contact and footer content has no permanent hidden or clipping state", () 
     ".site-footer-shell",
     ".site-footer-inner",
     ".site-footer-back-to-top",
-    ".site-footer-identity",
     ".site-footer-socials",
     ".site-footer-meta",
   ];
