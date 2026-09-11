@@ -49,7 +49,13 @@ const project = {
 } as const;
 
 const projectViews = ["Overview", "Features", "Technology"] as const;
-const technicalFocus = ["Backend", "APIs", "Database", "Access Control"] as const;
+const technicalFocus = [
+  "Backend",
+  "APIs",
+  "Database",
+  "Authentication",
+  "Access Control",
+] as const;
 
 function PanelHeading({
   icon: Icon,
@@ -91,6 +97,7 @@ export default function ProjectsSection() {
             className="projects-outline-title"
             variant="scale-in"
             delay={80}
+            data-section-number="04"
           >
             Projects
           </MotionReveal>
@@ -131,6 +138,8 @@ export default function ProjectsSection() {
             </div>
 
             <div className="projects-system-visual" aria-label="Project visual placeholder" role="img">
+              <span aria-hidden="true" className="projects-system-coordinate projects-system-coordinate-one">API</span>
+              <span aria-hidden="true" className="projects-system-coordinate projects-system-coordinate-two">DB</span>
               <span aria-hidden="true" className="projects-system-core">
                 <ServerIcon className="h-8 w-8" />
               </span>

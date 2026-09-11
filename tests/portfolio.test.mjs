@@ -24,6 +24,8 @@ function loadModule(path, globals = {}, imports = {}) {
           motion: new Proxy({}, { get: () => () => null }),
           useInView: () => globals.__motionInView ?? true,
           useMotionValue: (initial) => ({ current: initial, set(value) { this.current = value; } }),
+          useScroll: () => ({ scrollYProgress: { current: 0 } }),
+          useSpring: (value) => value,
           useReducedMotion: () => false,
         };
       }
@@ -81,7 +83,11 @@ function navigationHarness({ width = 1920, height = 870, headerHeight = 68, hash
   const sections = ids.map((id, index) => ({
     id, getBoundingClientRect: () => ({ top: headerHeight + index * 900 - window.scrollY }),
   }));
-  const header = { getBoundingClientRect: () => ({ bottom: headerHeight }), querySelector: () => control };
+  const header = {
+    getBoundingClientRect: () => ({ bottom: headerHeight }),
+    querySelector: () => control,
+    toggleAttribute() {},
+  };
   const document = {
     ...events("document"), activeElement: null,
     documentElement: { scrollHeight: 5600 },
@@ -142,6 +148,10 @@ test("Navigation keeps all destinations in a compact fixed header", () => {
     assert.match(source, new RegExp(`href: "#${destination}"`));
   }
   assert.match(source, /site-navigation-contact/);
+  assert.match(source, /site-navigation-progress/);
+  assert.match(source, /useScroll/);
+  assert.match(source, /useSpring/);
+  assert.match(source, /data-scrolled/);
   assert.match(source, /isContact \? "Contact Me" : link\.label/);
   assert.match(cssSource, /:root\s*\{[^}]*--header-height:\s*68px/s);
   assert.match(cssSource, /\.site-header\s*\{[^}]*position:\s*fixed[^}]*height:\s*var\(--header-height\)/s);
@@ -237,8 +247,8 @@ test("Motion reveal replaces the custom IntersectionObserver reveal system", () 
   assert.match(revealSource, /from "motion\/react"/);
   assert.match(revealSource, /useInView/);
   assert.match(revealSource, /initial=\{false\}/);
-  assert.match(revealSource, /margin: "0px 0px -96px 0px"/);
-  assert.match(revealSource, /maxRevealDelay = 1200/);
+  assert.match(revealSource, /margin: "0px 0px -64px 0px"/);
+  assert.match(revealSource, /maxRevealDelay = 900/);
   assert.doesNotMatch(revealSource, /,\s*400\)\s*\/\s*1000/);
   assert.doesNotMatch(revealSource, /IntersectionObserver/);
   assert.doesNotMatch(cssSource, /\.reveal-on-scroll/);
@@ -310,6 +320,9 @@ test("Home keeps all required content and links in the server-rendered component
   assert.match(source, /sizes="\(max-width: 767px\) 280px, \(max-width: 1279px\) 300px, 340px"/);
   assert.match(source, /priority/);
   assert.match(source, /className="profile-portrait-image"/);
+  assert.match(source, /profile-orbit-axis/);
+  assert.match(source, /profile-orbit-corners/);
+  assert.match(source, /data-step=/);
   assert.doesNotMatch(source, /className="cw-mark/);
   assert.equal((source.match(/label: "/g) ?? []).length, 4);
   for (const label of ["Code", "Build", "Deploy", "Monitor"]) {
@@ -395,6 +408,8 @@ test("About preserves its complete content and editorial card hierarchy", () => 
   assert.match(source, /href="#about-details"/);
   assert.match(source, /motionVariant="fade-left"/);
   assert.match(source, /motionVariant="fade-right"/);
+  assert.match(source, /about-card-index/);
+  assert.match(source, /data-section-number="02"/);
   assert.match(cssSource, /\.about-card-grid > :last-child\s*\{[^}]*grid-column:\s*1 \/ -1/s);
   assert.match(cssSource, /@media \(min-width: 1100px\)[\s\S]*?\.about-card-grid\s*\{[^}]*grid-template-columns:\s*repeat\(3, minmax\(0, 1fr\)\)/s);
   assert.match(cssSource, /\.about-card-grid\s*\{[^}]*align-items:\s*stretch/s);
@@ -501,6 +516,8 @@ test("Skills uses local accessible technology marks and responsive grouped grids
   assert.match(source, /skills-category-grid/);
   assert.match(source, /skills-technology-grid/);
   assert.match(source, /skills-level-grid/);
+  assert.match(source, /skills-category-index/);
+  assert.match(source, /data-section-number="03"/);
   assert.doesNotMatch(source, /<button\b/);
   assert.match(iconsSource, /export function TechnologyMark/);
   assert.match(iconsSource, /technology-logo-mask/);
@@ -511,6 +528,7 @@ test("Skills uses local accessible technology marks and responsive grouped grids
   }
   assert.match(cssSource, /\.skills-category-grid,\s*\.skills-level-grid\s*\{[^}]*repeat\(2/s);
   assert.match(cssSource, /grid-template-columns:\s*repeat\(auto-fit, minmax\(/);
+  assert.match(cssSource, /@media \(min-width: 1100px\)[\s\S]*?\.skills-category-grid\s*\{[^}]*grid-template-columns:\s*repeat\(3/s);
 });
 
 test("Skills content has no permanent hidden or clipping state", () => {
@@ -578,6 +596,8 @@ test("Projects preserves the complete University ERP project record", () => {
   assert.match(source, /A university group project where I applied software development/);
   assert.match(source, /aria-label="Project visual placeholder"/);
   assert.match(source, /More practical projects are in development\./);
+  assert.match(source, /"Authentication"/);
+  assert.match(source, /data-section-number="04"/);
   for (const item of requiredContent) assert.ok(source.includes(item), item);
 });
 
@@ -657,10 +677,12 @@ test("Education preserves its complete content in the editorial theme", () => {
   ];
 
   assert.equal((source.match(/id="education"/g) ?? []).length, 1);
-  assert.match(source, />EDUCATION<\/p>/);
+  assert.match(source, />\s*EDUCATION\s*<\/p>/);
   assert.match(source, /education-metadata/);
   assert.match(source, /education-support-grid/);
-  assert.match(cssSource, /\.section-shell\.education-panel\.page-panel\s*\{[^}]*background:\s*var\(--education-background\)/s);
+  assert.match(source, /education-meta-index/);
+  assert.match(source, /data-section-number="05"/);
+  assert.match(cssSource, /\.section-shell\.education-panel\.page-panel\s*\{[^}]*background-color:\s*var\(--education-background\)/s);
   assert.match(cssSource, /\.education-metadata\s*\{[^}]*grid-template-columns:\s*repeat\(2/s);
   for (const item of content) assert.ok(source.includes(item), item);
 });
@@ -674,6 +696,7 @@ test("Contact ends with the email form while footer keeps compact contact action
   assert.match(source, /Let&apos;s connect and discuss opportunities\./);
   assert.match(source, /I&apos;m open to Software Engineering, Backend Development, Cloud/);
   assert.match(source, /<ContactForm \/>/);
+  assert.match(source, /data-section-number="06"/);
   assert.doesNotMatch(source, /contact-details|contact-socials|Chaniru Weerasuriya|Malabe, Sri Lanka|github\.com|linkedin\.com/);
   assert.match(footerSource, /Chaniru Weerasuriya/);
   assert.doesNotMatch(footerSource, /Malabe, Sri Lanka/);
@@ -697,6 +720,8 @@ test("Contact form validates locally and prepares an honest mailto message", () 
   assert.match(source, /encodeURIComponent\(subject\)/);
   assert.match(source, /encodeURIComponent\(body\)/);
   assert.match(source, /Prepare Email/);
+  assert.match(source, /clearError/);
+  assert.match(source, /<MailIcon/);
   assert.match(source, /It is not\s+sent automatically\./);
   assert.doesNotMatch(source, /fetch\(|localStorage|sessionStorage|console\.|successfully (?:sent|delivered)/i);
 });
@@ -920,8 +945,16 @@ test("page metadata uses the configured origin and keeps unconfigured builds non
     assert.equal(metadata.openGraph.url, value ? `${value}/` : undefined);
     assert.equal(metadata.metadataBase.href, value ? `${value}/` : "http://localhost:3000/");
     assert.equal(metadata.twitter.card, "summary_large_image");
-    assert.equal(viewport.themeColor, "#020817");
+    assert.equal(viewport.themeColor, "#050505");
   }
+});
+
+test("ambient pointer tracking is frame-throttled and cleans up", () => {
+  const source = readFileSync(new URL("components/ambient-background.tsx", root), "utf8");
+  assert.match(source, /requestAnimationFrame\(updatePosition\)/);
+  assert.match(source, /cancelAnimationFrame\(frame\)/);
+  assert.match(source, /\(pointer: fine\)/);
+  assert.match(source, /prefersReducedMotion/);
 });
 
 test("short-viewport scrolling is scoped to the mobile menu, not page sections", () => {

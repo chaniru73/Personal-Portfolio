@@ -180,7 +180,7 @@ export default function HomeAnimation() {
         });
         listenersAttached = true;
 
-        const finePointer = window.matchMedia("(pointer: fine)");
+        const finePointer = window.matchMedia("(pointer: fine) and (min-width: 1024px)");
 
         if (finePointer.matches && visual) {
           const rotateX = gsap.quickTo(visual, "rotationX", { duration: 0.45, ease: "power2.out" });

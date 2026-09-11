@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion, useScroll, useSpring } from "motion/react";
 
 import { MenuIcon } from "@/components/icons";
 import { microTransition } from "@/lib/motion-variants";
@@ -33,6 +33,12 @@ export default function SiteNavigation() {
   const [activeHref, setActiveHref] = useState<SectionHref>("#home");
   const prefersReducedMotion = useReducedMotion();
   const mobileMenuRef = useRef<HTMLDetailsElement>(null);
+  const { scrollYProgress } = useScroll();
+  const progressScaleX = useSpring(scrollYProgress, {
+    stiffness: 180,
+    damping: 32,
+    restDelta: 0.001,
+  });
   useEffect(() => {
     const header = document.querySelector<HTMLElement>(".site-header");
     const sections = sectionIds.flatMap((id) => {
@@ -45,6 +51,7 @@ export default function SiteNavigation() {
     const headerBottom = () => header?.getBoundingClientRect().bottom ?? 0;
 
     const syncVisibleSection = () => {
+      header?.toggleAttribute("data-scrolled", window.scrollY > 12);
       if (pending) return;
       const line = headerBottom() + 24;
       let href: SectionHref = "#home";
@@ -202,10 +209,11 @@ export default function SiteNavigation() {
   };
 
   return (
-    <nav
-      aria-label="Primary navigation"
-      className="site-navigation content-container mx-auto flex w-full items-center justify-between px-5 sm:px-8"
-    >
+    <>
+      <nav
+        aria-label="Primary navigation"
+        className="site-navigation content-container mx-auto flex w-full items-center justify-between px-5 sm:px-8"
+      >
       <motion.a
         href="#home"
         aria-label="CW home"
@@ -244,6 +252,12 @@ export default function SiteNavigation() {
           <li key={link.label}>{renderLink(link, "desktop")}</li>
         ))}
       </ul>
-    </nav>
+      </nav>
+      <motion.span
+        aria-hidden="true"
+        className="site-navigation-progress"
+        style={{ scaleX: progressScaleX }}
+      />
+    </>
   );
 }

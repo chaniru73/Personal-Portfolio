@@ -2,6 +2,7 @@
 
 import { type FormEvent, useState } from "react";
 
+import { MailIcon } from "@/components/icons";
 import MotionReveal from "@/components/motion-reveal";
 
 const contactEmail = "chaniruweerasuriya@gmail.com";
@@ -29,6 +30,15 @@ function validateForm(form: HTMLFormElement) {
 
 export default function ContactForm() {
   const [errors, setErrors] = useState<FieldErrors>({});
+
+  function clearError(field: keyof FieldErrors) {
+    setErrors((current) => {
+      if (!current[field]) return current;
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
+  }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -67,6 +77,7 @@ export default function ContactForm() {
           required
           aria-invalid={Boolean(errors.name)}
           aria-describedby={errors.name ? "contact-name-error" : undefined}
+          onChange={() => clearError("name")}
         />
         {errors.name ? (
           <p id="contact-name-error" className="contact-field-error" role="alert">
@@ -85,6 +96,7 @@ export default function ContactForm() {
           required
           aria-invalid={Boolean(errors.email)}
           aria-describedby={errors.email ? "contact-email-error" : undefined}
+          onChange={() => clearError("email")}
         />
         {errors.email ? (
           <p id="contact-email-error" className="contact-field-error" role="alert">
@@ -114,6 +126,7 @@ export default function ContactForm() {
           required
           aria-invalid={Boolean(errors.message)}
           aria-describedby={errors.message ? "contact-message-error" : undefined}
+          onChange={() => clearError("message")}
         />
         {errors.message ? (
           <p id="contact-message-error" className="contact-field-error" role="alert">
@@ -124,6 +137,7 @@ export default function ContactForm() {
 
       <MotionReveal className="contact-submit-row" delay={520}>
         <button type="submit" className="contact-submit focus-ring">
+          <MailIcon className="h-4 w-4" aria-hidden="true" />
           Prepare Email
         </button>
         <p className="contact-form-note">

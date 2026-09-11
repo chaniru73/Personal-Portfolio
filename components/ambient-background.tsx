@@ -23,15 +23,26 @@ export default function AmbientBackground() {
 
   useEffect(() => {
     if (!enabled) return;
+    let frame = 0;
+    let pointerX = window.innerWidth * 0.72;
+    let pointerY = window.innerHeight * 0.18;
+
+    const updatePosition = () => {
+      x.set(`${(pointerX / window.innerWidth) * 100}%`);
+      y.set(`${(pointerY / window.innerHeight) * 100}%`);
+      frame = 0;
+    };
 
     const onPointerMove = (event: PointerEvent) => {
-      x.set(`${(event.clientX / window.innerWidth) * 100}%`);
-      y.set(`${(event.clientY / window.innerHeight) * 100}%`);
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      if (!frame) frame = window.requestAnimationFrame(updatePosition);
     };
 
     window.addEventListener("pointermove", onPointerMove, { passive: true });
 
     return () => {
+      window.cancelAnimationFrame(frame);
       window.removeEventListener("pointermove", onPointerMove);
     };
   }, [enabled, x, y]);

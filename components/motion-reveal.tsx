@@ -59,7 +59,7 @@ const motionElements = {
   footer: motion.footer,
 } satisfies Record<MotionRevealElement, ElementType>;
 
-const maxRevealDelay = 1200;
+const maxRevealDelay = 900;
 
 export default function MotionReveal({
   as = "div",
@@ -76,8 +76,8 @@ export default function MotionReveal({
   const [mounted, setMounted] = useState(false);
   const isInView = useInView(ref, {
     once: true,
-    amount: 0.18,
-    margin: "0px 0px -96px 0px",
+    amount: 0.14,
+    margin: "0px 0px -64px 0px",
   });
   const Component = motionElements[as] as ComponentType<
     Omit<HTMLMotionProps<"div">, "ref"> & { ref?: Ref<HTMLElement> }

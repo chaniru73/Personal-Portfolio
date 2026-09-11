@@ -104,6 +104,8 @@ export default function HomeSection() {
             <div
               className="profile-orbit relative flex aspect-square items-center justify-center"
             >
+              <span aria-hidden="true" className="profile-orbit-axis" />
+              <span aria-hidden="true" className="profile-orbit-corners" />
               <span aria-hidden="true" className="orbit-ring" />
               <span aria-hidden="true" className="orbit-marker orbit-marker-one" />
               <span aria-hidden="true" className="orbit-marker orbit-marker-two" />
@@ -129,6 +131,7 @@ export default function HomeSection() {
                 return (
                   <li
                     key={step.label}
+                    data-step={String(index + 1).padStart(2, "0")}
                     className="hero-workflow-card workflow-label soft-card rounded-lg px-3 py-3 text-center text-sm font-bold"
                   >
                     <span className="icon-bubble mx-auto mb-2">
@@ -149,7 +152,9 @@ export default function HomeSection() {
       <div className="home-info-band">
         <div className="home-info-inner">
           <div className="home-info-copy">
-            <p className="hero-gsap-item home-info-label">My Work</p>
+            <p className="hero-gsap-item home-info-label" data-section-number="01">
+              My Work
+            </p>
             <p
               className="hero-gsap-item hero-introduction body-copy max-w-2xl text-base leading-8 sm:text-lg"
             >

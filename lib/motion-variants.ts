@@ -4,7 +4,7 @@ export type RevealVariant = "fade-up" | "fade-left" | "fade-right" | "scale-in";
 
 export const motionEase = [0.22, 1, 0.36, 1] as const;
 
-export const revealDistance = 24;
+export const revealDistance = 20;
 
 export const revealVariants: Record<RevealVariant, Variants> = {
   "fade-up": {
@@ -26,7 +26,7 @@ export const revealVariants: Record<RevealVariant, Variants> = {
 };
 
 export const revealTransition = {
-  duration: 0.58,
+  duration: 0.54,
   ease: motionEase,
 };
 

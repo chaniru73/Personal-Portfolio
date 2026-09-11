@@ -179,6 +179,9 @@ function SkillCategoryCard({
           <Icon className="h-5 w-5" />
         </span>
         <h4 className="skills-category-title font-bold">{title}</h4>
+        <span aria-hidden="true" className="skills-category-index">
+          {String(staggerIndex + 1).padStart(2, "0")}
+        </span>
       </div>
       <ul className="skills-technology-grid">
         {skills.map((skill, index) => (
@@ -239,7 +242,10 @@ export default function SkillsSection() {
     >
       <div className="skills-layout relative mx-auto w-full">
         <MotionReveal className="skills-introduction text-center">
-          <p className="skills-badge mx-auto inline-flex text-sm font-bold">
+          <p
+            className="skills-badge section-outline-label mx-auto inline-flex text-sm font-bold"
+            data-section-number="03"
+          >
             SKILLS
           </p>
 

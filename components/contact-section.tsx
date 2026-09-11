@@ -15,6 +15,7 @@ export default function ContactSection() {
           id="contact-title"
           className="contact-outline-title"
           variant="scale-in"
+          data-section-number="06"
         >
           Contact
         </MotionReveal>
