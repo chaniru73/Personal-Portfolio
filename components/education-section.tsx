@@ -36,7 +36,6 @@ export default function EducationSection() {
         <MotionReveal className="education-introduction text-center">
           <p
             className="education-badge section-outline-label mx-auto inline-flex text-sm font-bold"
-            data-section-number="05"
           >
             EDUCATION
           </p>
@@ -77,9 +76,6 @@ export default function EducationSection() {
                     className="education-meta-item"
                   >
                     <dt>
-                      <span aria-hidden="true" className="education-meta-index">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
                       <Icon className="h-4 w-4" aria-hidden="true" />
                       {detail.label}
                     </dt>

@@ -50,9 +50,15 @@ export default function AmbientBackground() {
   return (
     <motion.div
       aria-hidden="true"
-      className="ambient-glow"
+      className="ambient-background"
       data-enabled={enabled ? "true" : "false"}
       style={{ "--cursor-x": x, "--cursor-y": y } as MotionStyle}
-    />
+    >
+      <span className="ambient-aurora" />
+      <span className="ambient-grid" />
+      <span className="ambient-stars" />
+      <span className="ambient-horizon" />
+      <span className="ambient-cursor-glow" />
+    </motion.div>
   );
 }

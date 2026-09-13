@@ -149,7 +149,6 @@ export default function ProjectsSection() {
             <MotionReveal
               as="section"
               className="projects-case-panel projects-problem-panel"
-              variant="fade-left"
               delay={270}
               hover="card"
               aria-labelledby="project-problem-title"
@@ -163,7 +162,6 @@ export default function ProjectsSection() {
             <MotionReveal
               as="section"
               className="projects-case-panel projects-contribution-panel"
-              variant="fade-right"
               delay={350}
               hover="card"
               aria-labelledby="project-contribution-title"

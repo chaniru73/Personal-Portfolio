@@ -64,7 +64,7 @@ export default function HomeAnimation() {
           clearProps: clearRevealProps,
         });
         if (diagonal) {
-          gsap.set(diagonal, { clearProps: "clipPath,opacity,visibility,transform" });
+          gsap.set(diagonal, { clearProps: "opacity,visibility,transform" });
         }
         if (diagonalEdge) {
           gsap.set(diagonalEdge, { clearProps: "opacity,visibility,transform" });
@@ -149,14 +149,13 @@ export default function HomeAnimation() {
             gsap.set(animatedTargets, {
               clearProps: clearRevealProps,
             });
-            gsap.set(diagonal, { clearProps: "clipPath" });
           },
           onInterrupt: showHomeTargets,
         });
 
         timeline
-          .fromTo(diagonal, { clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)" }, { clipPath: "polygon(0 0, 63% 0, 51% 100%, 0 100%)", duration: 0.72 }, 0)
-          .fromTo(diagonalEdge, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0.16)
+          .fromTo(diagonal, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.82 }, 0)
+          .fromTo(diagonalEdge, { autoAlpha: 0, scaleX: 0 }, { autoAlpha: 1, scaleX: 1, duration: 0.7 }, 0.16)
           .fromTo(greeting, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0 }, 0.08)
           .fromTo(firstName, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0 }, 0.16)
           .fromTo(surname, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0 }, 0.23)
