@@ -48,8 +48,13 @@ const project = {
   ],
 } as const;
 
-const projectViews = ["Overview", "Features", "Technology"] as const;
-const technicalFocus = ["Backend", "APIs", "Database", "Access Control"] as const;
+const technicalFocus = [
+  "Backend",
+  "APIs",
+  "Database",
+  "Authentication",
+  "Access Control",
+] as const;
 
 function PanelHeading({
   icon: Icon,
@@ -86,51 +91,49 @@ export default function ProjectsSection() {
             <span className="projects-banner-node projects-banner-node-three" />
           </div>
           <MotionReveal
-            as="h2"
-            id="projects-title"
+            as="p"
             className="projects-outline-title"
             variant="scale-in"
             delay={80}
+            data-section-number="04"
           >
             Projects
           </MotionReveal>
-          <p className="projects-banner-heading">
-            Practical work that reflects how I learn and build.
-          </p>
+          <h2 id="projects-title" className="projects-banner-heading">
+            Practical work, presented with context.
+          </h2>
           <p className="projects-banner-copy">
-            A university group project where I applied software development
-            concepts to practical problems.
+            One verified university group project, including the problem, the
+            system, and my contribution.
           </p>
         </MotionReveal>
 
-        <MotionReveal className="projects-information-strip" delay={140}>
-          <ul aria-label="Project information groups">
-            {projectViews.map((view, index) => (
-              <li key={view}>
-                <span aria-hidden="true">0{index + 1}</span>
-                {view}
-              </li>
-            ))}
-          </ul>
-        </MotionReveal>
-
-        <article className="projects-mosaic" aria-labelledby="project-name">
-          <MotionReveal
-            as="section"
-            className="projects-mosaic-panel projects-identity-panel"
-            variant="scale-in"
-            delay={220}
-            hover="card"
-            aria-labelledby="project-name"
-          >
-            <span aria-hidden="true" className="projects-panel-pattern projects-network-pattern" />
-            <div className="projects-project-meta">
-              <span>{project.number}</span>
-              <span>{project.type}</span>
-              <span className="projects-completed-status">{project.status}</span>
+        <article className="projects-case-study" aria-labelledby="project-name">
+          <MotionReveal className="projects-case-header" delay={180}>
+            <div className="projects-case-intro">
+              <div className="projects-project-meta">
+                <span>{project.number}</span>
+                <span>{project.type}</span>
+                <span className="projects-completed-status">{project.status}</span>
+              </div>
+              <h3 id="project-name" className="projects-project-title">
+                {project.name}
+              </h3>
+              <p className="projects-case-description">{project.description}</p>
+              <div className="projects-focus-list" aria-label="Project technical focus">
+                {technicalFocus.map((item) => (
+                  <span key={item}>{item}</span>
+                ))}
+              </div>
             </div>
 
-            <div className="projects-system-visual" aria-label="Project visual placeholder" role="img">
+            <div
+              className="projects-system-visual"
+              aria-label="Conceptual backend system diagram"
+              role="img"
+            >
+              <span aria-hidden="true" className="projects-system-coordinate projects-system-coordinate-one">API</span>
+              <span aria-hidden="true" className="projects-system-coordinate projects-system-coordinate-two">DB</span>
               <span aria-hidden="true" className="projects-system-core">
                 <ServerIcon className="h-8 w-8" />
               </span>
@@ -140,101 +143,74 @@ export default function ProjectsSection() {
               <span aria-hidden="true" className="projects-system-node projects-system-node-two" />
               <span aria-hidden="true" className="projects-system-node projects-system-node-three" />
             </div>
-
-            <h3 id="project-name" className="projects-project-title">
-              {project.name}
-            </h3>
-            <div className="projects-focus-list" aria-label="Project technical focus">
-              {technicalFocus.map((item) => (
-                <span key={item}>{item}</span>
-              ))}
-            </div>
           </MotionReveal>
+
+          <div className="projects-case-body">
+            <MotionReveal
+              as="section"
+              className="projects-case-panel projects-problem-panel"
+              variant="fade-left"
+              delay={270}
+              hover="card"
+              aria-labelledby="project-problem-title"
+            >
+              <PanelHeading icon={LayersIcon} id="project-problem-title">
+                The problem
+              </PanelHeading>
+              <p>{project.problem}</p>
+            </MotionReveal>
+
+            <MotionReveal
+              as="section"
+              className="projects-case-panel projects-contribution-panel"
+              variant="fade-right"
+              delay={350}
+              hover="card"
+              aria-labelledby="project-contribution-title"
+            >
+              <PanelHeading icon={DatabaseIcon} id="project-contribution-title">
+                My contribution
+              </PanelHeading>
+              <p>{project.contribution}</p>
+            </MotionReveal>
+
+            <MotionReveal
+              as="section"
+              className="projects-case-panel projects-features-panel"
+              delay={430}
+              hover="card"
+              aria-labelledby="project-features-title"
+            >
+              <PanelHeading icon={CheckIcon} id="project-features-title">
+                What the system covers
+              </PanelHeading>
+              <ul className="projects-feature-list">
+                {project.keyFeatures.map((feature) => (
+                  <li key={feature}>
+                    <CheckIcon className="h-4 w-4" aria-hidden="true" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </MotionReveal>
+          </div>
 
           <MotionReveal
             as="section"
-            className="projects-mosaic-panel projects-overview-panel"
-            variant="fade-left"
-            delay={290}
-            hover="card"
-            aria-labelledby="project-overview-title"
-          >
-            <span aria-hidden="true" className="projects-panel-pattern projects-grid-pattern" />
-            <PanelHeading icon={LayersIcon} id="project-overview-title">
-              Project overview
-            </PanelHeading>
-            <p>{project.description}</p>
-          </MotionReveal>
-
-          <MotionReveal
-            as="section"
-            className="projects-mosaic-panel projects-problem-panel"
-            variant="fade-right"
-            delay={360}
-            hover="card"
-            aria-labelledby="project-problem-title"
-          >
-            <span aria-hidden="true" className="projects-panel-pattern projects-api-pattern" />
-            <PanelHeading icon={LayersIcon} id="project-problem-title">
-              Problem
-            </PanelHeading>
-            <p>{project.problem}</p>
-          </MotionReveal>
-
-          <MotionReveal
-            as="section"
-            className="projects-mosaic-panel projects-contribution-panel"
-            variant="fade-left"
-            delay={430}
-            hover="card"
-            aria-labelledby="project-contribution-title"
-          >
-            <span aria-hidden="true" className="projects-panel-pattern projects-terminal-pattern" />
-            <PanelHeading icon={DatabaseIcon} id="project-contribution-title">
-              My contribution
-            </PanelHeading>
-            <p>{project.contribution}</p>
-          </MotionReveal>
-
-          <MotionReveal
-            as="section"
-            className="projects-mosaic-panel projects-features-panel"
-            variant="fade-right"
-            delay={500}
-            hover="card"
-            aria-labelledby="project-features-title"
-          >
-            <span aria-hidden="true" className="projects-panel-pattern projects-access-pattern" />
-            <PanelHeading icon={CheckIcon} id="project-features-title">
-              Key features
-            </PanelHeading>
-            <ul className="projects-feature-list">
-              {project.keyFeatures.map((feature) => (
-                <li key={feature}>
-                  <CheckIcon className="h-4 w-4" aria-hidden="true" />
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </MotionReveal>
-
-          <MotionReveal
-            as="section"
-            className="projects-mosaic-panel projects-technology-panel"
-            delay={570}
-            hover="card"
+            className="projects-case-footer"
+            delay={510}
             aria-labelledby="project-technology-title"
           >
-            <span aria-hidden="true" className="projects-panel-pattern projects-database-pattern" />
-            <PanelHeading icon={DatabaseIcon} id="project-technology-title">
-              Technologies and availability
-            </PanelHeading>
-
-            <ul className="projects-technology-list" aria-label="Project technologies">
-              {project.technologies.map((technology) => (
-                <li key={technology}>{technology}</li>
-              ))}
-            </ul>
+            <div className="projects-technology-block">
+              <PanelHeading icon={DatabaseIcon} id="project-technology-title">
+                Technology
+              </PanelHeading>
+              <ul className="projects-technology-list" aria-label="Project technologies">
+                {project.technologies.map((technology) => (
+                  <li key={technology}>{technology}</li>
+                ))}
+              </ul>
+            </div>
 
             <dl className="projects-availability-list">
               {project.links.map((link) => {
@@ -254,7 +230,7 @@ export default function ProjectsSection() {
           </MotionReveal>
         </article>
 
-        <MotionReveal as="p" className="projects-closing-message" delay={700}>
+        <MotionReveal as="p" className="projects-closing-message" delay={600}>
           More practical projects are in development.
         </MotionReveal>
       </div>

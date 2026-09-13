@@ -79,7 +79,10 @@ export default function SiteFooter() {
 
         <div className="site-footer-meta">
           <p>&copy; {currentYear} Chaniru Weerasuriya. All rights reserved.</p>
-          <p className="site-footer-build">Built with Next.js, TypeScript, and Tailwind CSS.</p>
+          <p className="site-footer-build">
+            <span aria-hidden="true" className="site-footer-status-dot" />
+            Built with Next.js, TypeScript, and Tailwind CSS.
+          </p>
         </div>
       </div>
     </MotionReveal>
