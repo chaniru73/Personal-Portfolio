@@ -153,12 +153,13 @@ test("Navigation keeps all destinations in a compact fixed header", () => {
   assert.match(source, /useSpring/);
   assert.match(source, /data-scrolled/);
   assert.match(source, /isContact \? "Contact Me" : link\.label/);
-  assert.match(cssSource, /:root\s*\{[^}]*--header-height:\s*68px/s);
-  assert.match(cssSource, /\.site-header\s*\{[^}]*position:\s*fixed[^}]*height:\s*var\(--header-height\)/s);
-  assert.match(cssSource, /\.main-stack\s*\{[^}]*padding-top:\s*var\(--header-height\)/s);
-  assert.match(cssSource, /html\s*\{[^}]*scroll-padding-top:\s*var\(--header-height\)/s);
-  assert.match(cssSource, /@media \(max-width: 767px\)[\s\S]*?:root\s*\{[^}]*--header-height:\s*62px/);
-  assert.match(cssSource, /\.site-navigation-brand\s*\{[^}]*border:\s*0[^}]*background:\s*transparent[^}]*box-shadow:\s*none/s);
+  assert.match(cssSource, /:root\s*\{[^}]*--navbar-height:\s*56px[^}]*--navbar-top-offset:\s*0\.5rem[^}]*--header-height:\s*calc\(var\(--navbar-height\) \+ var\(--navbar-top-offset\) \+ env\(safe-area-inset-top, 0px\)\)[^}]*--anchor-clearance:\s*calc\(var\(--header-height\) \+ 1rem\)/s);
+  assert.match(cssSource, /\.site-header\s*\{[^}]*position:\s*fixed[^}]*height:\s*var\(--header-height\)[^}]*padding:\s*calc\(var\(--navbar-top-offset\) \+ env\(safe-area-inset-top, 0px\)\)/s);
+  assert.match(cssSource, /html\s*\{[^}]*scroll-padding-top:\s*var\(--anchor-clearance\)/s);
+  assert.match(cssSource, /@media \(max-width:960px\)[\s\S]*?:root\s*\{[^}]*--navbar-height:\s*54px;\s*--navbar-top-offset:\s*\.45rem/);
+  assert.match(cssSource, /\.site-navigation\s*\{[^}]*height:\s*var\(--navbar-height\)[^}]*border-radius:\s*var\(--navbar-radius\)[^}]*background-clip:\s*padding-box[^}]*backdrop-filter:\s*blur\(18px\)/s);
+  assert.doesNotMatch(cssSource, /\.site-navigation::before/);
+  assert.match(cssSource, /\.site-navigation-brand\s*\{[^}]*min-height:\s*44px/s);
 });
 
 test("native navigation locks the target, permits rapid replacement, then settles", () => {
@@ -308,6 +309,7 @@ test("Home animation keeps GSAP scoped to hero and workflow elements", () => {
 
 test("Home keeps all required content and links in the server-rendered component", () => {
   const source = readFileSync(new URL("components/home-section.tsx", root), "utf8");
+  const navigationSource = readFileSync(new URL("components/site-navigation.tsx", root), "utf8");
   assert.equal((source.match(/id="home"/g) ?? []).length, 1);
   assert.match(source, /Hello, I&apost;m|Hello, I&apos;m/);
   assert.match(source, /Chaniru/);
@@ -322,9 +324,9 @@ test("Home keeps all required content and links in the server-rendered component
   assert.match(source, /home-info-copy/);
   assert.match(source, /className="hero-gsap-item hero-actions"/);
   assert.match(source, /href="#projects"/);
-  assert.match(source, /View Projects/);
-  assert.match(source, /href="#contact"/);
-  assert.match(source, /Contact Me/);
+  assert.match(source, /View My Work/);
+  assert.doesNotMatch(source, /href="#contact"|home-action-secondary|>\s*Contact Me\s*</);
+  assert.match(navigationSource, /\{ label: "Contact", href: "#contact" \}/);
   assert.match(source, /href="#about"/);
   assert.match(source, /Continue to the About section/);
   assert.match(source, /https:\/\/github\.com\/chaniru73/);
@@ -337,6 +339,7 @@ test("Home keeps all required content and links in the server-rendered component
   assert.match(source, /sizes="\(max-width: 639px\) 260px, \(max-width: 1023px\) 300px, 390px"/);
   assert.match(source, /priority/);
   assert.match(source, /className="profile-portrait-image"/);
+  assert.doesNotMatch(source, /data-section-number="01"/);
   assert.match(source, /profile-orbit-axis/);
   assert.match(source, /profile-orbit-corners/);
   assert.doesNotMatch(source, /data-step=/);
@@ -347,7 +350,7 @@ test("Home keeps all required content and links in the server-rendered component
   }
 });
 
-test("Home uses the corrected diagonal composition and a quiet supporting workflow", () => {
+test("Home uses the cinematic atmospheric composition and a quiet supporting workflow", () => {
   const homeSource = readFileSync(new URL("components/home-section.tsx", root), "utf8");
   const cssSource = readFileSync(new URL("app/globals.css", root), "utf8");
   const navigationSource = readFileSync(new URL("components/site-navigation.tsx", root), "utf8");
@@ -360,18 +363,18 @@ test("Home uses the corrected diagonal composition and a quiet supporting workfl
   assert.match(homeSource, /home-dark-content/);
   assert.match(homeSource, /home-info-band/);
   assert.match(homeSource, /home-about-bridge/);
+  assert.doesNotMatch(homeSource, /home-action-secondary|data-section-number="01"/);
+  assert.doesNotMatch(cssSource, /\.home-action-secondary|\.home-info-label::before/);
+  assert.match(cssSource, /\.home-info-label::after\s*\{[^}]*background:\s*linear-gradient/s);
   assert.doesNotMatch(homeSource, /home-band-monogram|home-visual-caption|home-workflow-kicker/);
-  assert.match(cssSource, /--home-diagonal-top:\s*63%/);
-  assert.match(cssSource, /--home-diagonal-bottom:\s*51%/);
-  assert.match(cssSource, /clip-path:\s*polygon\(0 0, var\(--home-diagonal-top\) 0, var\(--home-diagonal-bottom\) 100%, 0 100%\)/);
-  assert.match(cssSource, /grid-template-columns:\s*minmax\(0, 56%\) minmax\(0, 44%\)/);
-  assert.match(cssSource, /\.home-action\s*\{[^}]*white-space:\s*nowrap/s);
-  assert.match(cssSource, /\.hero-name\s*\{[^}]*line-height:\s*0\.92/s);
-  assert.match(cssSource, /\.home-info-band\s*\{[^}]*width:\s*100%/s);
-  assert.match(cssSource, /@media \(min-width: 1024px\) and \(max-height: 799px\)/);
-  assert.match(cssSource, /@media \(max-width: 767px\)[\s\S]*?\.home-hero-upper\s*\{[^}]*min-height:\s*0/s);
-  assert.match(cssSource, /@media \(max-width: 767px\)[\s\S]*?\.home-dark-content\s*\{[^}]*min-height:\s*0/s);
-  assert.match(cssSource, /@media \(min-width: 1024px\) and \(max-height: 799px\)[\s\S]*?\.home-hero-upper\s*\{[^}]*min-height:\s*32\.5rem/s);
+  assert.match(cssSource, /\.home-hero-upper\s*\{[^}]*background:\s*linear-gradient/s);
+  assert.match(cssSource, /\.home-diagonal-light\s*\{[^}]*linear-gradient/s);
+  assert.match(cssSource, /\.home-upper-content\s*\{[^}]*grid-template-columns:\s*minmax\(0,\.92fr\) minmax\(31rem,1\.08fr\)/s);
+  assert.match(cssSource, /\.home-action, \.contact-submit\s*\{[^}]*min-height:\s*46px/s);
+  assert.match(cssSource, /\.hero-name\s*\{[^}]*line-height:\s*\.88/s);
+  assert.match(cssSource, /\.home-info-band\s*\{[^}]*border:\s*1px solid var\(--color-border\)/s);
+  assert.match(cssSource, /@media \(max-height:720px\) and \(min-width:961px\)/);
+  assert.match(cssSource, /@media \(max-width:767px\)[\s\S]*?\.hero-visual\s*\{[^}]*grid-template-columns:\s*1fr/s);
   assert.equal((homeSource.match(/<nav\b/g) ?? []).length, 0);
   assert.equal((navigationSource.match(/<nav\b/g) ?? []).length, 1);
 });
@@ -422,14 +425,13 @@ test("About preserves its complete content and editorial card hierarchy", () => 
   assert.match(source, /I value continuous learning, teamwork, adaptability/);
   assert.match(source, /I&apos;m open to Software Engineering, Backend Development, Cloud/);
   assert.match(source, /href="#about-details"/);
-  assert.match(source, /motionVariant="fade-left"/);
-  assert.match(source, /motionVariant="fade-right"/);
-  assert.match(source, /about-card-index/);
-  assert.match(source, /data-section-number="02"/);
+  assert.doesNotMatch(source, /motionVariant|variant="fade-(?:left|right)"/);
+  assert.doesNotMatch(source, /about-card-index|about-section-index|data-section-number="02"|padStart/);
+  assert.doesNotMatch(cssSource, /\.about-card-index|\.about-section-index/);
   assert.match(source, /about-editorial-grid/);
-  assert.match(cssSource, /\.about-card-grid\s*\{[^}]*grid-template-columns:\s*repeat\(12, minmax\(0, 1fr\)\)/s);
-  assert.match(cssSource, /\.about-info-card-2\s*\{[^}]*grid-column:\s*6 \/ 13/s);
-  assert.match(cssSource, /\.about-card-grid\s*\{[^}]*align-items:\s*stretch/s);
+  assert.match(cssSource, /\.about-card-grid\s*\{[^}]*grid-template-columns:\s*repeat\(3,minmax\(0,1fr\)\)/s);
+  assert.match(cssSource, /\.about-info-card\s*\{[^}]*min-height:\s*100%/s);
+  assert.match(cssSource, /@media \(max-width:767px\)[\s\S]*?\.about-card-grid[^}]*grid-template-columns:\s*1fr/s);
   for (const item of requiredItems) assert.ok(source.includes(item), item);
 });
 
@@ -533,8 +535,9 @@ test("Skills uses local accessible technology marks and responsive grouped grids
   assert.match(source, /skills-category-grid/);
   assert.match(source, /skills-technology-grid/);
   assert.match(source, /skills-level-grid/);
-  assert.match(source, /skills-category-index/);
-  assert.match(source, /data-section-number="03"/);
+  assert.doesNotMatch(source, /skills-category-index|data-section-number="03"/);
+  assert.doesNotMatch(cssSource, /\.skills-category-index/);
+  assert.match(cssSource, /\.skills-introduction\s*\{[^}]*align-items:\s*center[^}]*text-align:\s*center/s);
   assert.doesNotMatch(source, /<button\b/);
   assert.match(iconsSource, /export function TechnologyMark/);
   assert.match(iconsSource, /technology-logo-mask/);
@@ -543,9 +546,9 @@ test("Skills uses local accessible technology marks and responsive grouped grids
   for (const icon of new Set([...source.matchAll(/"(\/icons\/skills\/[^"]+\.svg)"/g)].map((match) => match[1]))) {
     assert.ok(existsSync(new URL(`public${icon}`, root)), icon);
   }
-  assert.match(cssSource, /\.skills-category-grid,\s*\.skills-level-grid\s*\{[^}]*repeat\(2/s);
-  assert.match(cssSource, /grid-template-columns:\s*repeat\(auto-fit, minmax\(/);
-  assert.match(cssSource, /@media \(min-width: 1100px\)[\s\S]*?\.skills-category-grid\s*\{[^}]*grid-template-columns:\s*repeat\(3/s);
+  assert.match(cssSource, /\.skills-category-grid\s*\{[^}]*repeat\(3,minmax\(0,1fr\)\)/s);
+  assert.match(cssSource, /grid-template-columns:\s*repeat\(auto-fit,minmax\(/);
+  assert.match(cssSource, /@media \(max-width:960px\)[\s\S]*?\.skills-category-grid\s*\{[^}]*repeat\(2,minmax\(0,1fr\)\)/s);
 });
 
 test("Skills content has no permanent hidden or clipping state", () => {
@@ -633,9 +636,9 @@ test("Projects presents one real project as a truthful connected case study", ()
   assert.doesNotMatch(source, /projects-information-strip|projects-mosaic-panel|projectViews/);
   assert.doesNotMatch(source, /<img\b|https?:\/\//);
   assert.doesNotMatch(source, /<a\b[^>]*(?:Repository|Live demo)/s);
-  assert.match(cssSource, /\.projects-case-study\s*\{[^}]*width:\s*min\(100%, 90rem\)/s);
+  assert.match(cssSource, /\.projects-case-study\s*\{[^}]*width:\s*min\(100%,90rem\)/s);
   assert.match(cssSource, /\.projects-case-body\s*\{[^}]*display:\s*grid/s);
-  assert.match(cssSource, /\.projects-case-study \.projects-contribution-panel\s*\{[^}]*background:\s*#e4e5e1/s);
+  assert.match(cssSource, /\.projects-case-study \.projects-contribution-panel\s*\{[^}]*background:\s*rgba\(6,33,30,\.96\)/s);
 });
 
 test("Projects content has no permanent hidden or clipping state", () => {
@@ -698,14 +701,15 @@ test("Education preserves its complete content in the editorial theme", () => {
   assert.match(source, /education-metadata/);
   assert.match(source, /education-card-body/);
   assert.match(source, /education-support-grid/);
-  assert.match(source, /education-meta-index/);
-  assert.match(source, /data-section-number="05"/);
-  assert.match(cssSource, /\.section-shell\.education-panel\.page-panel\s*\{[^}]*background-color:\s*var\(--education-background\)/s);
+  assert.doesNotMatch(source, /education-meta-index|data-section-number="05"|padStart/);
+  assert.doesNotMatch(cssSource, /\.education-meta-index/);
+  assert.match(cssSource, /\.education-introduction\s*\{[^}]*align-items:\s*center[^}]*text-align:\s*center/s);
+  assert.match(cssSource, /\.education-panel\s*\{[^}]*background:\s*rgba\(3,19,17,\.34\)/s);
   assert.match(cssSource, /\.education-metadata\s*\{[^}]*grid-template-columns:\s*repeat\(2/s);
   for (const item of content) assert.ok(source.includes(item), item);
 });
 
-test("Contact ends with the email form while footer keeps compact contact actions", () => {
+test("Contact presents the direct email action while footer keeps social links only", () => {
   const source = readFileSync(new URL("components/contact-section.tsx", root), "utf8");
   const footerSource = readFileSync(new URL("components/site-footer.tsx", root), "utf8");
 
@@ -716,11 +720,16 @@ test("Contact ends with the email form while footer keeps compact contact action
   assert.match(source, /<ContactForm \/>/);
   assert.match(source, /Prefer to write directly/);
   assert.match(source, /href="mailto:chaniruweerasuriya@gmail\.com"/);
-  assert.match(source, /data-section-number="06"/);
-  assert.doesNotMatch(source, /contact-details|contact-socials|Chaniru Weerasuriya|Malabe, Sri Lanka|github\.com|linkedin\.com/);
+  assert.match(source, /aria-label="Email Chaniru Weerasuriya directly"/);
+  assert.match(source, /title="Email Chaniru Weerasuriya"/);
+  assert.match(source, /className="social-icon-button contact-email-link focus-ring"/);
+  assert.match(source, /<MailIcon[^>]*aria-hidden="true"/);
+  assert.doesNotMatch(source, />\s*chaniruweerasuriya@gmail\.com\s*</);
+  assert.doesNotMatch(source, /data-section-number="06"/);
+  assert.doesNotMatch(source, /contact-details|contact-socials|Malabe, Sri Lanka|github\.com|linkedin\.com/);
   assert.match(footerSource, /Chaniru Weerasuriya/);
   assert.doesNotMatch(footerSource, /Malabe, Sri Lanka/);
-  assert.match(footerSource, /mailto:chaniruweerasuriya@gmail\.com/);
+  assert.doesNotMatch(footerSource, /mailto:|MailIcon|label: "Email"/);
   assert.doesNotMatch(source, /Facebook|Instagram|twitter\.com|x\.com/);
 });
 
@@ -741,12 +750,12 @@ test("Contact form validates locally and prepares an honest mailto message", () 
   assert.match(source, /encodeURIComponent\(body\)/);
   assert.match(source, /Prepare Email/);
   assert.match(source, /clearError/);
-  assert.match(source, /<MailIcon/);
-  assert.match(source, /It is not\s+sent automatically\./);
+  assert.match(source, /className="sr-only"[\s\S]*Opens your email application with the message prepared; it is not sent\s+automatically\./);
+  assert.doesNotMatch(source, /contact-form-note|This opens your email application|<MailIcon/);
   assert.doesNotMatch(source, /fetch\(|localStorage|sessionStorage|console\.|successfully (?:sent|delivered)/i);
 });
 
-test("Footer remains full width with real navigation and contact links", () => {
+test("Footer remains full width with real navigation and social links", () => {
   const source = readFileSync(new URL("components/site-footer.tsx", root), "utf8");
   const cssSource = readFileSync(new URL("app/globals.css", root), "utf8");
 
@@ -756,10 +765,11 @@ test("Footer remains full width with real navigation and contact links", () => {
   assert.match(source, /aria-label="Back to top"/);
   assert.match(source, /Visit Chaniru Weerasuriyas GitHub profile/);
   assert.match(source, /Visit Chaniru Weerasuriyas LinkedIn profile/);
-  assert.match(source, /Email Chaniru Weerasuriya/);
   assert.match(source, /https:\/\/github\.com\/chaniru73/);
   assert.match(source, /https:\/\/www\.linkedin\.com\/in\/chaniru-weerasuriya-a89607373/);
-  assert.match(source, /mailto:chaniruweerasuriya@gmail\.com/);
+  assert.match(source, /aria-label="Footer social links"/);
+  assert.doesNotMatch(source, /mailto:|MailIcon|label: "Email"|Email Chaniru Weerasuriya/);
+  assert.equal((source.match(/label: "(?:LinkedIn|GitHub)"/g) ?? []).length, 2);
   assert.match(source, /new Date\(\)\.getFullYear\(\)/);
   assert.match(source, /Chaniru Weerasuriya\. All rights reserved\./);
   assert.match(source, /Built with Next\.js, TypeScript, and Tailwind CSS\./);
@@ -769,7 +779,6 @@ test("Footer remains full width with real navigation and contact links", () => {
   assert.ok(source.indexOf("site-footer-socials") < source.indexOf("site-footer-meta"));
   assert.ok(source.indexOf("Chaniru Weerasuriya. All rights reserved.") > source.indexOf("site-footer-meta"));
   assert.ok(source.indexOf("https://www.linkedin.com/in/chaniru-weerasuriya-a89607373") < source.indexOf("https://github.com/chaniru73"));
-  assert.ok(source.indexOf("https://github.com/chaniru73") < source.indexOf("mailto:chaniruweerasuriya@gmail.com"));
   assert.doesNotMatch(source, /<MotionReveal[^>]*(?:site-footer-identity|site-footer-socials|site-footer-meta)/s);
   assert.doesNotMatch(source, /<MotionReveal[^>]*delay=\{(?:240|300|380)\}/);
   assert.doesNotMatch(cssSource, /\.site-footer-(?:identity|name|location)\b/);
@@ -778,7 +787,7 @@ test("Footer remains full width with real navigation and contact links", () => {
   assert.match(cssSource, /\.site-footer-inner\s*\{[^}]*margin-inline:\s*auto/s);
   assert.match(cssSource, /\.site-footer-inner\s*\{[^}]*overflow:\s*visible/s);
   assert.match(cssSource, /\.site-footer-back-to-top\s*\{[^}]*flex-direction:\s*column/s);
-  assert.match(cssSource, /\.site-footer-social-link\s*\{[^}]*width:\s*2\.375rem[^}]*height:\s*2\.375rem[^}]*flex:\s*0 0 2\.375rem[^}]*aspect-ratio:\s*1[^}]*padding:\s*0/s);
+  assert.match(cssSource, /\.site-footer-social-link\s*\{[^}]*width:\s*2\.75rem[^}]*height:\s*2\.75rem[^}]*flex:\s*0 0 2\.75rem[^}]*aspect-ratio:\s*1[^}]*padding:\s*0/s);
   assert.doesNotMatch(cssSource, /\.site-footer-shell\s*\{[^}]*min-height/s);
   assert.doesNotMatch(cssSource, /\.site-footer-shell\s*\{[^}]*height:\s*(?:100|[0-9]+s?vh)/s);
   assert.doesNotMatch(cssSource, /\.site-footer-inner\s*\{[^}]*min-height/s);
@@ -912,7 +921,7 @@ test("Lenis uses the GSAP ticker clock and cleans up listeners", () => {
   const h = smoothScrollHarness({ hash: "#about", headerHeight: 68 });
   assert.equal(h.lenisInstances.length, 1);
   const lenis = h.lenisInstances[0];
-  assert.equal(lenis.options.anchors.offset, -68);
+  assert.equal(lenis.options.anchors.offset, 0);
   assert.equal(lenis.options.infinite, false);
   assert.equal(lenis.options.syncTouch, false);
   assert.equal(lenis.options.prevent({ closest: () => ({}) }), true);
@@ -921,7 +930,7 @@ test("Lenis uses the GSAP ticker clock and cleans up listeners", () => {
   assert.equal(lenis.lastRaf, 1250);
   for (const fn of h.frames.values()) fn();
   assert.equal(lenis.scrollTargets[0].target, "#about");
-  assert.equal(lenis.scrollTargets[0].options.offset, -68);
+  assert.equal(lenis.scrollTargets[0].options.offset, 0);
   assert.equal(lenis.scrollTargets[0].options.immediate, true);
   assert.equal(lenis.scrollTargets[0].options.force, true);
   lenis.callback();

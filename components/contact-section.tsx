@@ -1,4 +1,6 @@
+import { MailIcon } from "@/components/icons";
 import ContactForm from "@/components/contact-form";
+import MotionLink from "@/components/motion-link";
 import MotionReveal from "@/components/motion-reveal";
 
 export default function ContactSection() {
@@ -15,7 +17,6 @@ export default function ContactSection() {
             as="p"
             className="contact-outline-title"
             variant="scale-in"
-            data-section-number="06"
           >
             Contact
           </MotionReveal>
@@ -33,11 +34,18 @@ export default function ContactSection() {
             <span aria-hidden="true" className="contact-divider" />
           </MotionReveal>
 
-          <MotionReveal as="p" className="contact-direct" delay={190}>
-            Prefer to write directly?{" "}
-            <a className="focus-ring" href="mailto:chaniruweerasuriya@gmail.com">
-              chaniruweerasuriya@gmail.com
-            </a>
+          <MotionReveal className="contact-direct" delay={190}>
+            <p>Prefer to write directly?</p>
+            <MotionLink
+              href="mailto:chaniruweerasuriya@gmail.com"
+              aria-label="Email Chaniru Weerasuriya directly"
+              title="Email Chaniru Weerasuriya"
+              className="social-icon-button contact-email-link focus-ring"
+              interaction="icon"
+            >
+              <MailIcon className="h-5 w-5" aria-hidden="true" />
+              <span className="sr-only">Email Chaniru Weerasuriya</span>
+            </MotionLink>
           </MotionReveal>
         </div>
 

@@ -2,7 +2,6 @@
 
 import { type FormEvent, useState } from "react";
 
-import { MailIcon } from "@/components/icons";
 import MotionReveal from "@/components/motion-reveal";
 
 const contactEmail = "chaniruweerasuriya@gmail.com";
@@ -137,13 +136,12 @@ export default function ContactForm() {
 
       <MotionReveal className="contact-submit-row" delay={520}>
         <button type="submit" className="contact-submit focus-ring">
-          <MailIcon className="h-4 w-4" aria-hidden="true" />
           Prepare Email
+          <span className="sr-only">
+            Opens your email application with the message prepared; it is not sent
+            automatically.
+          </span>
         </button>
-        <p className="contact-form-note">
-          This opens your email application with the message prepared. It is not
-          sent automatically.
-        </p>
       </MotionReveal>
     </form>
   );

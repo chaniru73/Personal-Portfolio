@@ -8,7 +8,9 @@ import Lenis from "lenis";
 let scrollTriggerRegistered = false;
 
 function getHeaderOffset() {
-  return -(document.querySelector<HTMLElement>(".site-header")?.getBoundingClientRect().height ?? 0);
+  // CSS scroll-margin-top owns the fixed-header clearance for native and Lenis
+  // navigation alike. A second numeric offset would double that clearance.
+  return 0;
 }
 
 export default function SmoothScrollProvider({ children }: { children: ReactNode }) {

@@ -76,22 +76,15 @@ export default function HomeSection() {
               <div
                 role="group"
                 className="hero-gsap-item hero-actions"
-                aria-label="Portfolio actions"
+                aria-label="Portfolio action"
               >
                 <MotionLink
                   href="#projects"
                   className="home-action home-action-primary focus-ring"
                   interaction="button"
                 >
-                  View Projects
+                  View My Work
                   <span aria-hidden="true">{"\u2197"}</span>
-                </MotionLink>
-                <MotionLink
-                  href="#contact"
-                  className="home-action home-action-secondary focus-ring"
-                  interaction="button"
-                >
-                  Contact Me
                 </MotionLink>
               </div>
 
@@ -182,7 +175,7 @@ export default function HomeSection() {
       <div id="home-story" className="home-info-band">
         <div className="home-info-inner">
           <div className="home-info-copy">
-            <h2 className="hero-gsap-item home-info-label" data-section-number="01">
+            <h2 className="hero-gsap-item home-info-label">
               My Work
             </h2>
             <p className="hero-gsap-item hero-introduction">

@@ -2,7 +2,6 @@ import {
   DeployIcon,
   GithubLogo,
   LinkedinLogo,
-  MailIcon,
 } from "@/components/icons";
 import MotionLink from "@/components/motion-link";
 import MotionReveal from "@/components/motion-reveal";
@@ -21,13 +20,6 @@ const footerLinks = [
     icon: GithubLogo,
     external: true,
     ariaLabel: "Visit Chaniru Weerasuriyas GitHub profile",
-  },
-  {
-    label: "Email",
-    href: "mailto:chaniruweerasuriya@gmail.com",
-    icon: MailIcon,
-    external: false,
-    ariaLabel: "Email Chaniru Weerasuriya",
   },
 ] as const;
 
@@ -52,7 +44,7 @@ export default function SiteFooter() {
           <span>Back to top</span>
         </MotionLink>
 
-        <nav aria-label="Footer contact links">
+        <nav aria-label="Footer social links">
           <ul className="site-footer-socials">
             {footerLinks.map((link) => {
               const Icon = link.icon;

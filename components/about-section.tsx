@@ -3,7 +3,7 @@ import {
   EducationIcon,
   StrengthIcon,
 } from "@/components/icons";
-import MotionReveal, { type MotionRevealProps } from "@/components/motion-reveal";
+import MotionReveal from "@/components/motion-reveal";
 
 const education = [
   "BSc (Hons) in Software Engineering",
@@ -37,25 +37,20 @@ function DetailList({
   items,
   icon: Icon,
   delay,
-  motionVariant = "fade-up",
   variant = "tags",
-  index,
 }: {
   title: string;
   items: readonly string[];
   icon: typeof EducationIcon;
   delay: number;
-  motionVariant?: MotionRevealProps["variant"];
   variant?: "rows" | "tags";
-  index: number;
 }) {
   return (
     <MotionReveal
       as="article"
       delay={delay}
       hover="card"
-      variant={motionVariant}
-      className={`about-info-card about-info-card-${index} surface-card`}
+      className="about-info-card surface-card"
     >
       <div className="about-card-heading flex items-center gap-3">
         <span className="about-card-icon icon-bubble">
@@ -64,9 +59,6 @@ function DetailList({
         <h3 className="card-title text-lg font-bold tracking-normal">
           {title}
         </h3>
-        <span aria-hidden="true" className="about-card-index">
-          {String(index).padStart(2, "0")}
-        </span>
       </div>
 
       {variant === "rows" ? (
@@ -110,13 +102,8 @@ export default function AboutSection() {
               delay={40}
               variant="scale-in"
               className="about-badge section-outline-label inline-flex text-sm font-bold"
-              data-section-number="02"
             >
               ABOUT ME
-            </MotionReveal>
-
-            <MotionReveal as="p" delay={180}>
-              <span aria-hidden="true" className="about-section-index">02</span>
             </MotionReveal>
 
             <MotionReveal
@@ -174,24 +161,19 @@ export default function AboutSection() {
             items={education}
             icon={EducationIcon}
             delay={540}
-            motionVariant="fade-left"
             variant="rows"
-            index={1}
           />
           <DetailList
             title="Currently Learning"
             items={currentlyLearning}
             icon={BookIcon}
             delay={620}
-            motionVariant="fade-right"
-            index={2}
           />
           <DetailList
             title="Core Strengths"
             items={coreStrengths}
             icon={StrengthIcon}
             delay={700}
-            index={3}
           />
         </div>
       </div>
