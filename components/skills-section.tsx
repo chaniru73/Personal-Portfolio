@@ -285,45 +285,31 @@ export default function SkillsSection() {
           </div>
         </section>
 
-        <section aria-labelledby="learning-title" className="skills-proficiency-area">
-          <MotionReveal
-            as="h3"
-            id="learning-title"
-            delay={700}
-            className="skills-area-title"
-          >
-            Currently Learning
-          </MotionReveal>
-          <LevelGroup
-            title="Currently Learning"
-            skills={skillLevels[1].skills}
-            delay={760}
-            className="skills-learning-group"
-            labelledBy="learning-title"
-            showTitle={false}
-          />
-        </section>
-
         <aside aria-labelledby="skill-level-title" className="skills-proficiency-area">
-          <MotionReveal delay={820}>
+          <MotionReveal delay={700}>
             <h3 id="skill-level-title" className="skills-area-title">
-              Current Skill Level
+              Skills in Practice
             </h3>
             <p className="skills-level-summary body-copy text-base">
-              Practical familiarity by focus area.
+              Current skill level based on coursework, projects, and active learning.
             </p>
           </MotionReveal>
 
-          <div className="skills-level-grid grid min-w-0">
+          <div className="skills-level-grid skills-level-grid-three grid min-w-0">
             <LevelGroup
               title={skillLevels[0].title}
               skills={skillLevels[0].skills}
-              delay={880}
+              delay={780}
+            />
+            <LevelGroup
+              title={skillLevels[1].title}
+              skills={skillLevels[1].skills}
+              delay={850}
             />
             <LevelGroup
               title={skillLevels[2].title}
               skills={skillLevels[2].skills}
-              delay={960}
+              delay={920}
             />
           </div>
         </aside>

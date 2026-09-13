@@ -65,59 +65,61 @@ export default function EducationSection() {
             <span className="education-status">In Progress</span>
           </header>
 
-          <dl className="education-metadata">
-            {educationDetails.map((detail, index) => {
-              const Icon = detail.icon;
-              return (
-                <MotionReveal
-                  as="div"
-                  key={detail.label}
-                  delay={220 + index * 65}
-                  className="education-meta-item"
-                >
-                  <dt>
-                    <span aria-hidden="true" className="education-meta-index">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <Icon className="h-4 w-4" aria-hidden="true" />
-                    {detail.label}
-                  </dt>
-                  <dd>{detail.value}</dd>
-                </MotionReveal>
-              );
-            })}
-          </dl>
+          <div className="education-card-body">
+            <dl className="education-metadata">
+              {educationDetails.map((detail, index) => {
+                const Icon = detail.icon;
+                return (
+                  <MotionReveal
+                    as="div"
+                    key={detail.label}
+                    delay={220 + index * 65}
+                    className="education-meta-item"
+                  >
+                    <dt>
+                      <span aria-hidden="true" className="education-meta-index">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <Icon className="h-4 w-4" aria-hidden="true" />
+                      {detail.label}
+                    </dt>
+                    <dd>{detail.value}</dd>
+                  </MotionReveal>
+                );
+              })}
+            </dl>
 
-          <MotionReveal delay={580} className="education-study-areas">
-            <div className="education-subheading">
-              <BookIcon className="h-5 w-5" aria-hidden="true" />
-              <h4>Relevant study areas</h4>
+            <MotionReveal delay={580} className="education-study-areas">
+              <div className="education-subheading">
+                <BookIcon className="h-5 w-5" aria-hidden="true" />
+                <h4>Relevant study areas</h4>
+              </div>
+              <ul>
+                {studyAreas.map((area) => <li key={area}>{area}</li>)}
+              </ul>
+            </MotionReveal>
+
+            <div className="education-support-grid">
+              <MotionReveal as="article" delay={650} className="education-support-panel">
+                <div className="education-subheading">
+                  <StrengthIcon className="h-5 w-5" aria-hidden="true" />
+                  <h4>Practical Experience</h4>
+                </div>
+                <p>
+                  I&apos;m developing practical experience through university projects and
+                  technical coursework while strengthening my software engineering,
+                  backend, cloud, and DevOps knowledge.
+                </p>
+              </MotionReveal>
+
+              <MotionReveal as="article" delay={720} className="education-support-panel">
+                <div className="education-subheading">
+                  <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                  <h4>Certification Status</h4>
+                </div>
+                <p>Additional certifications are not currently listed in this portfolio.</p>
+              </MotionReveal>
             </div>
-            <ul>
-              {studyAreas.map((area) => <li key={area}>{area}</li>)}
-            </ul>
-          </MotionReveal>
-
-          <div className="education-support-grid">
-            <MotionReveal as="article" delay={650} className="education-support-panel">
-              <div className="education-subheading">
-                <StrengthIcon className="h-5 w-5" aria-hidden="true" />
-                <h4>Practical Experience</h4>
-              </div>
-              <p>
-                I&apos;m developing practical experience through university projects and
-                technical coursework while strengthening my software engineering,
-                backend, cloud, and DevOps knowledge.
-              </p>
-            </MotionReveal>
-
-            <MotionReveal as="article" delay={720} className="education-support-panel">
-              <div className="education-subheading">
-                <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                <h4>Certification Status</h4>
-              </div>
-              <p>Additional certifications are not currently listed in this portfolio.</p>
-            </MotionReveal>
           </div>
         </MotionReveal>
       </div>
